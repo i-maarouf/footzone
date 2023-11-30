@@ -2,7 +2,9 @@
 export default defineNuxtConfig({
   devtools: {
     enabled: false,
-
+    ui: {
+      lightGray: "#232939",
+    },
     timeline: {
       enabled: true,
     },
