@@ -41,36 +41,40 @@
                 ? "Red Card"
                 : event.type == "yellowCard"
                 ? "Yellow Card"
-                : "GOAL"
+                : event.outcome == "goal"
+                ? "GOAL"
+                : event.outcome == "missed"
+                ? "Attempt On Target"
+                : "Undefined"
             }}</span>
             <span>{{ event.minute }}'</span>
           </div>
           <div
             :class="
-              event.type == 'chance'
-                ? 'playerGoal items-center justify-center gap-2 flex'
-                : event.type == 'yellowCard'
+              event.type == 'yellowCard'
                 ? 'playerYellow items-center justify-center gap-2 flex'
                 : event.type == 'redCard'
                 ? 'playerRed items-center justify-center gap-2 flex'
+                : event.outcome == 'goal'
+                ? 'playerGoal items-center justify-center gap-2 flex'
+                : event.outcome == 'missed'
+                ? 'playerNoGoal items-center justify-center gap-2 flex'
                 : 'playerNoGoal items-center justify-center gap-2 flex'
             "
           >
             <img
               :src="
-                event.type == 'chance'
-                  ? './goal.svg'
-                  : event.type == 'yellowCard'
+                event.type == 'yellowCard'
                   ? './yellow-card.svg'
                   : event.type == 'redCard'
                   ? './red-card.svg'
+                  : event.outcome == 'goal'
+                  ? './goal.svg'
+                  : event.outcome == 'missed'
+                  ? './onTarget.svg'
                   : ''
               "
-              :class="
-                event.type == 'chance'
-                  ? 'animate-[bounce_1.2s_ease-in-out_infinite]'
-                  : ''
-              "
+              :class="event.outcome == 'goal' ? 'bounce' : ''"
               style="width: 28px"
               alt=""
             />
@@ -112,7 +116,9 @@
             :ui="{ rounded: 'rounded-none' }"
             class="p-10 w-1/3 h-full inline-block"
             variant="outline"
-            @click="handleAction(1)"
+            @click="
+              handleAction(1, this.playMinutes.indexOf(this.currentTime - 1))
+            "
           />
           <UButton
             size="xl"
@@ -121,7 +127,9 @@
             square
             class="p-10 w-1/3 h-full inline-block"
             variant="outline"
-            @click="handleAction(2)"
+            @click="
+              handleAction(2, this.playMinutes.indexOf(this.currentTime - 1))
+            "
           />
 
           <UButton
@@ -131,7 +139,9 @@
             square
             class="p-10 w-1/3 h-full inline-block"
             variant="outline"
-            @click="handleAction(3)"
+            @click="
+              handleAction(3, this.playMinutes.indexOf(this.currentTime - 1))
+            "
           />
           <!-- </div> -->
           <!-- <div class="w-full"> -->
@@ -142,7 +152,9 @@
             square
             class="p-10 w-1/3 h-full inline-block"
             variant="outline"
-            @click="handleAction(4)"
+            @click="
+              handleAction(4, this.playMinutes.indexOf(this.currentTime - 1))
+            "
           />
           <UButton
             size="xl"
@@ -151,7 +163,9 @@
             square
             class="p-10 w-1/3 h-full inline-block"
             variant="outline"
-            @click="handleAction(5)"
+            @click="
+              handleAction(5, this.playMinutes.indexOf(this.currentTime - 1))
+            "
           />
           <UButton
             size="xl"
@@ -160,7 +174,9 @@
             square
             class="p-10 w-1/3 h-full inline-block"
             variant="outline"
-            @click="handleAction(6)"
+            @click="
+              handleAction(6, this.playMinutes.indexOf(this.currentTime - 1))
+            "
           />
           <!-- </div> -->
         </div>
@@ -239,7 +255,7 @@ export default {
       action: false,
       events: events,
       typeOfEvent: [],
-
+      areasBlocked: [],
       eventsTimeline: [],
       playMinutes: [],
       noOfEvents: 0,
@@ -269,10 +285,40 @@ export default {
         this.playMinutes = this.playMinutes.sort((a, b) => a - b);
       }
     },
-    handleAction(area) {
+    handleAction(area, index) {
       console.log("user chose: " + area);
-      this.handleTimeline();
-      this.action = false;
+      this.areasBlocked = [];
+      for (let i = 0; i < 4; i++) {
+        let areaBlocked = Math.floor(Math.random() * 7);
+        if (!this.areasBlocked.includes(areaBlocked)) {
+          this.areasBlocked.push(areaBlocked);
+        } else {
+          // If the value already exists, decrement i to try again
+          i--;
+        }
+
+        console.log("areaBlocked: " + areaBlocked);
+        // if(this.areaBlocked[i] == area){
+        //   this.chance
+        // }
+      }
+      let outcome = "";
+      if (this.typeOfEvent[index].event == "chance") {
+        if (this.areasBlocked.includes(area)) {
+          outcome = "missed";
+          this.handleTimeline(outcome);
+          // this.typeOfEvent[index].outcome.push(outcome);
+        } else {
+          outcome = "goal";
+          this.handleTimeline(outcome);
+
+          // this.typeOfEvent[index].outcome.push(outcome);
+        }
+      }
+
+      console.log("indexOfAction: " + index);
+      window.setTimeout((this.action = false), 3000);
+      // this.action = false;
     },
     playMatch() {
       this.currentTime = 0;
@@ -283,7 +329,7 @@ export default {
               if (this.currentTime == this.playMinutes[i]) {
                 this.action = true;
                 if (this.typeOfEvent[i].event != "chance")
-                  this.handleTimeline(i);
+                  this.handleTimeline(i, i);
 
                 console.log("stop the timer at :" + this.currentTime);
               }
@@ -293,21 +339,28 @@ export default {
         }
       }, 500);
     },
-    handleTimeline(indexNonAction) {
-      // console.log("index: " + indexNonAction);
+    handleTimeline(outcome, indexNonAction) {
       let index = indexNonAction
         ? this.playMinutes.indexOf(this.currentTime)
         : this.playMinutes.indexOf(this.currentTime - 1);
-      console.log("index: " + index);
+      index == -1 ? (index = 0) : (index = index);
+
       this.typeOfEvent[index].minute ? (index = index) : (index -= 1);
-      console.log("index2: " + index);
+      if (indexNonAction) {
+        let obj = {
+          minute: this.typeOfEvent[index].minute,
+          type: this.typeOfEvent[index].event,
+        };
+        this.eventsTimeline.push(obj);
+      } else {
+        let obj = {
+          minute: this.typeOfEvent[index].minute,
+          type: this.typeOfEvent[index].event,
+          outcome: outcome,
+        };
+        this.eventsTimeline.push(obj);
+      }
 
-      let obj = {
-        minute: this.typeOfEvent[index].minute,
-        type: this.typeOfEvent[index].event,
-      };
-
-      this.eventsTimeline.push(obj);
       this.scrollToTop();
     },
     scrollToTop() {
@@ -330,13 +383,12 @@ export default {
         // let index = Math.floor(Math.random() * 3);
         let prob = Math.random();
         let index = null;
-        console.log("prob: " + prob);
+
         prob <= this.events[2].probability
           ? (index = 2)
           : prob <= this.events[1].probability
           ? (index = 1)
           : (index = 0);
-        console.log("index: " + index);
 
         obj.event = this.events[index].type;
         obj.probability = this.events[index].probability;
@@ -344,8 +396,6 @@ export default {
 
         this.typeOfEvent.push(obj);
         let type = this.playMinutes.indexOf(this.currentTime);
-        console.log("type: " + type);
-        console.log("currentTime: " + this.currentTime);
       }
     },
   },
@@ -415,6 +465,26 @@ export default {
 
 .event {
   animation: fadeInOut 0.5s;
+}
+.bounce {
+  animation: bounce 1.5s ease-in-out 5;
+
+  /* animation: name duration timing-function delay iteration-count direction fill-mode; */
+}
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(0px);
+  }
+  75% {
+    transform: translateY(-3px);
+  }
 }
 @keyframes fadeInOut {
   0% {
