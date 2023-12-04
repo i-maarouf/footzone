@@ -11,7 +11,7 @@
         <div class="vs">VS</div>
         <div class="team2">
           <div class="name text-center">Barcelona</div>
-          <div class="card shadow-lg">
+          <div class="card2 shadow-lg">
             <div class="score">2</div>
           </div>
         </div>
@@ -26,8 +26,9 @@
 export default {};
 </script>
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 </style>
+
 <style scoped>
 .mainContainer {
   background: #2b2929;
@@ -41,7 +42,7 @@ export default {};
 }
 .vs {
   color: rgba(0, 0, 0, 0.43);
-  font-family: Inter;
+  font-family: Poppins;
   font-size: 201px;
   /* font-style: italic; */
   font-weight: 700;
@@ -60,13 +61,30 @@ export default {};
   min-height: 200px;
   border-radius: 20px;
   min-width: 300px;
-  border: 1px solid #d1d1dc;
-  background: #3c3c3c;
+  /* border: 1px solid #d1d1dc; */
+  /* background: #3c3c3c; */
+  background: linear-gradient(315deg, rgba(0, 0, 0, 0) 70.26%, #febe10a3 116.8%),
+    linear-gradient(131deg, #fff -2.76%, #00529f76 123.04%);
+
+  backdrop-filter: blur(5px);
+}
+.card2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  border-radius: 20px;
+  min-width: 300px;
+  /* border: 1px solid #d1d1dc; */
+  /* background: #3c3c3c; */
+  background: linear-gradient(315deg, rgba(0, 0, 0, 0) 0.26%, #a50044 156.8%),
+    linear-gradient(91deg, #3c3c3c 0.76%, #004d98 123.04%);
+
   backdrop-filter: blur(5px);
 }
 .score {
   color: rgba(0, 0, 0, 0.45);
-  font-family: Inter;
+  font-family: Poppins;
   font-size: 201px;
   /* font-style: italic; */
   font-weight: 700;
@@ -74,7 +92,7 @@ export default {};
 }
 .name {
   color: #c0c1d6;
-  font-family: Inter;
+  font-family: Poppins;
   font-size: 40px;
   /* font-style: italic; */
   font-weight: 700;

@@ -17,4 +17,8 @@ useHead({
 body {
   background: #2b2929;
 }
+::-webkit-scrollbar-track {
+  background: #2b2929;
+  width: 2px;
+}
 </style>
