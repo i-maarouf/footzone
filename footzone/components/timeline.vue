@@ -15,12 +15,20 @@
       </div>
       <div class="pause float-right justify-self-end items-center">
         <UButton
-          :icon="pause ? 'i-heroicons-play' : 'i-heroicons-pause'"
+          :icon="
+            matchFinish
+              ? 'i-heroicons-arrow-path'
+              : pause == true
+              ? 'i-heroicons-play'
+              : pause == false
+              ? 'i-heroicons-pause'
+              : ''
+          "
           size="sm"
           color="primary"
           square
           variant="solid"
-          @click="this.pause = !this.pause"
+          @click="handleMatchStatus"
         />
       </div>
     </div>
@@ -30,7 +38,11 @@
     >
       <div class="outsideContainer flex flex-col-reverse gap-4 items-center">
         <div
-          class="event flex flex-col gap-1"
+          :class="
+            event.for == this.teamsSelected[0].name
+              ? ' event flex flex-col gap-1 leftSide'
+              : 'event flex flex-col gap-1 rightSide'
+          "
           v-for="event in eventsTimeline"
           :key="event.minute"
           :id="event.minute"
@@ -102,7 +114,12 @@
         <div class="eventInfo">
           <div class="playerInfo">
             <div class="playerName">Jude Bellingham</div>
-            <div class="teamName">Real Madrid</div>
+            <div class="teamName">
+              {{
+                this.typeOfEvent[this.playMinutes.indexOf(this.currentTime - 1)]
+                  .for
+              }}
+            </div>
           </div>
           <img src="../assets/football.svg" style="width: 80px" alt="" />
           <div class="minute absolute px-4">{{ this.currentTime }}'</div>
@@ -111,10 +128,17 @@
           <!-- <div class="w-full"> -->
           <UButton
             size="xl"
+            :disabled="disableButtons ? true : false"
             color="indigo"
             square
             :ui="{ rounded: 'rounded-none' }"
-            class="p-10 w-1/3 h-full inline-block"
+            :class="
+              this.options[0].outcome == true
+                ? 'p-10 w-1/3 h-full inline-block shotGoal'
+                : this.options[0].outcome == false
+                ? 'p-10 w-1/3 h-full inline-block shotMissed'
+                : 'p-10 w-1/3 h-full inline-block'
+            "
             variant="outline"
             @click="
               handleAction(1, this.playMinutes.indexOf(this.currentTime - 1))
@@ -124,8 +148,15 @@
             size="xl"
             color="indigo"
             :ui="{ rounded: 'rounded-none' }"
+            :disabled="disableButtons ? true : false"
             square
-            class="p-10 w-1/3 h-full inline-block"
+            :class="
+              this.options[1].outcome == true
+                ? 'p-10 w-1/3 h-full inline-block shotGoal'
+                : this.options[1].outcome == false
+                ? 'p-10 w-1/3 h-full inline-block shotMissed'
+                : 'p-10 w-1/3 h-full inline-block'
+            "
             variant="outline"
             @click="
               handleAction(2, this.playMinutes.indexOf(this.currentTime - 1))
@@ -136,8 +167,15 @@
             size="xl"
             color="indigo"
             :ui="{ rounded: 'rounded-none' }"
+            :disabled="disableButtons ? true : false"
             square
-            class="p-10 w-1/3 h-full inline-block"
+            :class="
+              this.options[2].outcome == true
+                ? 'p-10 w-1/3 h-full inline-block shotGoal'
+                : this.options[2].outcome == false
+                ? 'p-10 w-1/3 h-full inline-block shotMissed'
+                : 'p-10 w-1/3 h-full inline-block'
+            "
             variant="outline"
             @click="
               handleAction(3, this.playMinutes.indexOf(this.currentTime - 1))
@@ -150,7 +188,14 @@
             color="indigo"
             :ui="{ rounded: 'rounded-none' }"
             square
-            class="p-10 w-1/3 h-full inline-block"
+            :disabled="disableButtons ? true : false"
+            :class="
+              this.options[3].outcome == true
+                ? 'p-10 w-1/3 h-full inline-block shotGoal'
+                : this.options[3].outcome == false
+                ? 'p-10 w-1/3 h-full inline-block shotMissed'
+                : 'p-10 w-1/3 h-full inline-block'
+            "
             variant="outline"
             @click="
               handleAction(4, this.playMinutes.indexOf(this.currentTime - 1))
@@ -160,8 +205,15 @@
             size="xl"
             color="indigo"
             :ui="{ rounded: 'rounded-none' }"
+            :disabled="disableButtons ? true : false"
             square
-            class="p-10 w-1/3 h-full inline-block"
+            :class="
+              this.options[4].outcome == true
+                ? 'p-10 w-1/3 h-full inline-block shotGoal'
+                : this.options[4].outcome == false
+                ? 'p-10 w-1/3 h-full inline-block shotMissed'
+                : 'p-10 w-1/3 h-full inline-block'
+            "
             variant="outline"
             @click="
               handleAction(5, this.playMinutes.indexOf(this.currentTime - 1))
@@ -171,8 +223,15 @@
             size="xl"
             color="indigo"
             :ui="{ rounded: 'rounded-none' }"
+            :disabled="disableButtons ? true : false"
             square
-            class="p-10 w-1/3 h-full inline-block"
+            :class="
+              this.options[5].outcome == true
+                ? 'p-10 w-1/3 h-full inline-block shotGoal'
+                : this.options[5].outcome == false
+                ? 'p-10 w-1/3 h-full inline-block shotMissed'
+                : 'p-10 w-1/3 h-full inline-block'
+            "
             variant="outline"
             @click="
               handleAction(6, this.playMinutes.indexOf(this.currentTime - 1))
@@ -193,7 +252,12 @@
         <div class="eventInfo">
           <div class="playerInfo">
             <div class="playerName">Jude Bellingham</div>
-            <div class="teamName">Real Madrid</div>
+            <div class="teamName">
+              {{
+                this.typeOfEvent[this.playMinutes.indexOf(this.currentTime - 1)]
+                  .for
+              }}
+            </div>
           </div>
           <img src="../assets/yellow-card.svg" style="width: 80px" alt="" />
 
@@ -223,7 +287,12 @@
         <div class="eventInfo">
           <div class="playerInfo">
             <div class="playerName">Jude Bellingham</div>
-            <div class="teamName">Real Madrid</div>
+            <div class="teamName">
+              {{
+                this.typeOfEvent[this.playMinutes.indexOf(this.currentTime - 1)]
+                  .for
+              }}
+            </div>
           </div>
           <img src="../assets/red-card.svg" style="width: 80px" alt="" />
         </div>
@@ -238,6 +307,31 @@
         />
       </div>
     </UModal>
+    <UModal v-model="matchFinishModal">
+      <div class="innerContainer p-10 gap-4 relative flex flex-col">
+        <div class="whistle flex items-center justify-center gap-4">
+          <img src="../assets/whistle.svg" class="whistleImage" alt="" />
+          <div class="whistleText text-center">Final whistle</div>
+          <UButton
+            icon="i-heroicons-x-mark"
+            size="md"
+            color="indigo"
+            class="absolute closeButton"
+            square
+            @click="this.matchFinishModal = false"
+            variant="soft"
+          />
+        </div>
+        <div class="matchInfo flex justify-center items-center gap-3">
+          <img :src="this.teamsSelected[0].icon" class="clubLogo" alt="" />
+          <div class="infoText">
+            {{ this.team1Score }} -
+            {{ this.team2Score }}
+          </div>
+          <img :src="this.teamsSelected[1].icon" class="clubLogo" alt="" />
+        </div>
+      </div>
+    </UModal>
   </div>
 </template>
 
@@ -247,13 +341,41 @@ import axios from "axios";
 
 export default {
   name: "timeline",
-
+  props: {
+    teamsSelected: Array,
+  },
   data() {
     return {
       currentTime: 0,
       pause: false,
       action: false,
+      matchFinish: false,
+      matchFinishModal: false,
+      disableButtons: false,
+      elo1: 0,
+      elo2: 0,
+      probability1: 0,
+      statistics: {
+        numberOfTeam1Reds: 0,
+
+        numberOfTeam2Reds: 0,
+        possession1: 0,
+        possession2: 0,
+      },
+
+      bookingFactor: 1,
+      bookingFactor2: 1,
+      team1Score: 0,
+      team2Score: 0,
       events: events,
+      options: [
+        { outcome: null },
+        { outcome: null },
+        { outcome: null },
+        { outcome: null },
+        { outcome: null },
+        { outcome: null },
+      ],
       typeOfEvent: [],
       areasBlocked: [],
       eventsTimeline: [],
@@ -263,8 +385,8 @@ export default {
   },
   methods: {
     getNumberOfChances() {
-      let minChances = 5;
-      let maxChances = 10;
+      let minChances = 8;
+      let maxChances = 12;
       this.noOfEvents = Math.floor(
         Math.random() * (maxChances - minChances + 1) + minChances
       );
@@ -288,8 +410,9 @@ export default {
     handleAction(area, index) {
       console.log("user chose: " + area);
       this.areasBlocked = [];
+      this.disableButtons = true;
       for (let i = 0; i < 4; i++) {
-        let areaBlocked = Math.floor(Math.random() * 7);
+        let areaBlocked = Math.floor(Math.random() * 6) + 1;
         if (!this.areasBlocked.includes(areaBlocked)) {
           this.areasBlocked.push(areaBlocked);
         } else {
@@ -307,9 +430,12 @@ export default {
         if (this.areasBlocked.includes(area)) {
           outcome = "missed";
           this.handleTimeline(outcome);
+          this.options[area - 1].outcome = false;
           // this.typeOfEvent[index].outcome.push(outcome);
         } else {
           outcome = "goal";
+          this.options[area - 1].outcome = true;
+
           this.handleTimeline(outcome);
 
           // this.typeOfEvent[index].outcome.push(outcome);
@@ -317,13 +443,17 @@ export default {
       }
 
       console.log("indexOfAction: " + index);
-      window.setTimeout((this.action = false), 3000);
+      window.setTimeout(() => {
+        this.action = false;
+        this.disableButtons = false;
+        this.resetOptions();
+      }, 3000);
       // this.action = false;
     },
     playMatch() {
       this.currentTime = 0;
       window.setInterval(() => {
-        if (!this.pause && !this.action) {
+        if (!this.pause && !this.action && !this.matchFinish) {
           if (this.currentTime <= 90) {
             for (let i = 0; i < this.playMinutes.length; i++) {
               if (this.currentTime == this.playMinutes[i]) {
@@ -332,12 +462,46 @@ export default {
                   this.handleTimeline(i, i);
 
                 console.log("stop the timer at :" + this.currentTime);
+                this.areasBlocked = [];
               }
             }
+
+            let elo1 = this.teamsSelected[0].ELO;
+            let elo2 = this.teamsSelected[1].ELO;
+            const range = 100;
+            const diff = Math.abs(elo1 - elo2);
+            const adjustmentFactor = 2; // You can tweak this value
+
+            const homeAdvantage = 0.02; // Advantage for the home team
+
+            let prob =
+              0.5 +
+              homeAdvantage +
+              (elo1 > elo2 ? 1 : -1) * (diff / range) * adjustmentFactor;
+
+            let random = Math.random();
+            if (random <= prob) {
+              this.statistics.possession1 += 1;
+            } else {
+              this.statistics.possession2 += 1;
+            }
+            this.getMatchStatistics();
+
             this.currentTime += 1;
+          } else {
+            this.matchFinish = true;
+            this.matchFinishModal = true;
+            // window.setTimeout(() => {
+            //   this.matchFinishModal = false;
+            // }, 5000);
           }
         }
       }, 500);
+    },
+    resetOptions() {
+      for (let i = 0; i < 6; i++) {
+        this.options[i].outcome = null;
+      }
     },
     handleTimeline(outcome, indexNonAction) {
       let index = indexNonAction
@@ -350,16 +514,26 @@ export default {
         let obj = {
           minute: this.typeOfEvent[index].minute,
           type: this.typeOfEvent[index].event,
+          for: this.typeOfEvent[index].for,
         };
         this.eventsTimeline.push(obj);
       } else {
         let obj = {
           minute: this.typeOfEvent[index].minute,
           type: this.typeOfEvent[index].event,
+          for: this.typeOfEvent[index].for,
           outcome: outcome,
         };
         this.eventsTimeline.push(obj);
+        if (outcome == "goal" && obj.for == this.teamsSelected[0].name) {
+          this.team1Score += 1;
+          this.$emit("changeTeam1Score", this.team1Score);
+        } else if (outcome == "goal" && obj.for == this.teamsSelected[1].name) {
+          this.team2Score += 1;
+          this.$emit("changeTeam2Score", this.team2Score);
+        }
       }
+      this.getMatchStatistics();
 
       this.scrollToTop();
     },
@@ -373,12 +547,28 @@ export default {
         behavior: "smooth",
       });
     },
+    handleMatchStatus() {
+      if (!this.matchFinish) {
+        this.pause = !this.pause;
+      } else {
+        this.matchFinish = false;
+        this.eventsTimeline = [];
+        this.noOfEvents = 0;
+        this.typeOfEvent = [];
+        this.playMinutes = [];
+        this.getNumberOfChances();
+        this.getPlayMinutes();
+        this.getMatchEvents();
+        this.playMatch();
+      }
+    },
     getMatchEvents() {
       for (let i = 0; i < this.playMinutes.length; i++) {
         let obj = {
           minute: "",
           event: "",
           probability: "",
+          for: "",
         };
         // let index = Math.floor(Math.random() * 3);
         let prob = Math.random();
@@ -390,20 +580,140 @@ export default {
           ? (index = 1)
           : (index = 0);
 
+        console.log("elo: " + this.elo1, this.elo2);
         obj.event = this.events[index].type;
         obj.probability = this.events[index].probability;
         obj.minute = this.playMinutes[i];
-
+        obj.for = this.chanceFor(this.elo1, this.elo2, index);
         this.typeOfEvent.push(obj);
         let type = this.playMinutes.indexOf(this.currentTime);
       }
+    },
+    chanceFor(elo1, elo2, index) {
+      // Calculate the range and probabilities
+      // console.log("******: " + elo1, elo2);
+
+      const range = 100;
+      const diff = Math.abs(elo1 - elo2);
+      const adjustmentFactor = 2; // You can tweak this value
+      const adjustmentFactor2 = 1; // You can tweak this value
+      const homeAdvantage = 0.02; // Advantage for the home team
+      this.probability1 = null;
+      if (index == 0) {
+        this.probability1 =
+          0.5 +
+          homeAdvantage +
+          (elo1 > elo2 ? 1 : -1) * (diff / range) * adjustmentFactor;
+        console.log("probablility for chance: " + this.probability1);
+      } else if (index != 0) {
+        this.probability1 =
+          0.5 -
+          homeAdvantage +
+          (elo1 > elo2 ? -1 : 1) * (diff / range) * adjustmentFactor2;
+        console.log("probablility for booking: " + this.probability1);
+      }
+      // let probability2 = 1 - this.probability1;
+
+      // Generate a random number between 0 and 1
+      const random = Math.random();
+      console.log("random: " + random);
+      // adjusting probability in the event of a red card
+      this.probability1 *= this.bookingFactor;
+      // probability2 *= this.bookingFactor2;
+      console.log("probablility for chance222: " + this.probability1);
+
+      // Check which number to pick based on probabilities
+      if (random < this.probability1) {
+        if (index == 2) {
+          this.statistics.numberOfTeam1Reds += 1;
+          this.bookingFactor *= Math.pow(
+            0.8,
+            this.statistics.numberOfTeam1Reds
+          );
+          this.bookingFactor2 *= Math.pow(
+            1.2,
+            this.statistics.numberOfTeam1Reds
+          );
+        }
+        return this.teamsSelected[0].name;
+      } else {
+        if (index == 2) {
+          this.statistics.numberOfTeam2Reds += 1;
+          this.bookingFactor2 *= Math.pow(
+            0.8,
+            this.statistics.numberOfTeam2Reds
+          );
+          this.bookingFactor *= Math.pow(
+            1.2,
+            this.statistics.numberOfTeam2Reds
+          );
+        }
+        return this.teamsSelected[1].name;
+      }
+    },
+    getMatchStatistics() {
+      let attemptsTeam1 = 0;
+      let attemptsTeam2 = 0;
+      let yellowCards1 = 0;
+      let yellowCards2 = 0;
+      let redCards1 = 0;
+      let redCards2 = 0;
+
+      for (let i = 0; i < this.eventsTimeline.length; i++) {
+        if (this.eventsTimeline[i].for == this.teamsSelected[0].name) {
+          if (this.eventsTimeline[i].type == "chance") {
+            attemptsTeam1++;
+          } else if (this.eventsTimeline[i].type == "yellowCard") {
+            yellowCards1++;
+          } else if (this.eventsTimeline[i].type == "redCard") {
+            redCards1++;
+          }
+        } else {
+          if (this.eventsTimeline[i].type == "chance") {
+            attemptsTeam2++;
+          } else if (this.eventsTimeline[i].type == "yellowCard") {
+            yellowCards2++;
+          } else if (this.eventsTimeline[i].type == "redCard") {
+            redCards2++;
+          }
+        }
+      }
+
+      let statistics = {
+        team1: {
+          possession: this.statistics.possession1,
+          totalAttempts: attemptsTeam1,
+          conversionRate:
+            attemptsTeam1 != 0 ? (this.team1Score / attemptsTeam1) * 100 : 0,
+          redCards: redCards1,
+          yellowCards: yellowCards1,
+        },
+        team2: {
+          possession: this.statistics.possession2,
+          totalAttempts: attemptsTeam2,
+          conversionRate:
+            attemptsTeam2 != 0 ? (this.team2Score / attemptsTeam2) * 100 : 0,
+          redCards: redCards2,
+          yellowCards: yellowCards2,
+        },
+      };
+      this.$emit("getMatchStatistics", statistics);
     },
   },
   mounted() {
     this.getNumberOfChances();
     this.getPlayMinutes();
-    this.getMatchEvents();
+    window.setTimeout(() => {
+      this.getMatchEvents();
+    }, 560);
+
+    this.getMatchStatistics();
     this.playMatch();
+  },
+  beforeUpdate() {
+    // console.log("this.teamsSelected[0].ELO :" + this.teamsSelected[0].ELO);
+    this.elo1 = this.teamsSelected[0].ELO;
+    this.elo2 = this.teamsSelected[1].ELO;
   },
 };
 </script>
@@ -448,6 +758,10 @@ export default {
   /* top: 18%; */
   right: 0;
 }
+.closeButton {
+  top: 10px;
+  right: 10px;
+}
 .info span {
   color: #c0c1d6;
   font-family: Poppins;
@@ -464,12 +778,31 @@ export default {
 }
 
 .event {
-  animation: fadeInOut 0.5s;
+  animation: fadeIn 0.5s;
+}
+.clubLogo {
+  animation: fadeIn 3s ease-in-out;
 }
 .bounce {
   animation: bounce 1.5s ease-in-out 5;
-
-  /* animation: name duration timing-function delay iteration-count direction fill-mode; */
+}
+.whistleImage {
+  animation: shake 0.5s ease-in-out 2;
+}
+@keyframes shake {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-15deg);
+  }
+  /* 50% {
+    transform: rotate(0deg);
+  } */
+  75% {
+    transform: rotate(15deg);
+  }
 }
 @keyframes bounce {
   0%,
@@ -486,7 +819,7 @@ export default {
     transform: translateY(-3px);
   }
 }
-@keyframes fadeInOut {
+@keyframes fadeIn {
   0% {
     opacity: 0;
   }
@@ -497,11 +830,11 @@ export default {
     opacity: 1;
   }
 }
-.event:nth-child(odd) {
+.rightSide {
   margin-left: 340px;
   max-width: 250px;
 }
-.event:nth-child(even) {
+.leftSide {
   margin-right: 340px;
   max-width: 250px;
 }
@@ -521,7 +854,12 @@ export default {
   font-weight: 700;
   line-height: normal;
 }
-
+.shotMissed {
+  background: red !important;
+}
+.shotGoal {
+  background: green !important;
+}
 .playerYellow {
   border-radius: 10px;
   /* border: 1px solid #c0c1d6; */
@@ -578,6 +916,30 @@ export default {
   display: flex;
   flex-direction: column;
   /* row-gap: 5px; */
+}
+.whistle img {
+  width: 82px;
+}
+.matchInfo img {
+  width: 128px;
+  height: 128px;
+}
+.infoText {
+  color: #c0c1d6;
+  font-family: Poppins;
+  font-size: 64px;
+  /* font-style: italic; */
+  font-weight: 600;
+  line-height: normal;
+}
+.whistleText {
+  color: #c0c1d6;
+  text-transform: uppercase;
+  font-family: Poppins;
+  font-size: 40px;
+  font-style: italic;
+  font-weight: 600;
+  line-height: normal;
 }
 .playerName {
   color: #c0c1d6;

@@ -21,4 +21,16 @@ body {
   background: #2b2929;
   width: 2px;
 }
+
+.list-disc {
+  display: none;
+}
+.rounded-e-full {
+  border-start-end-radius: 5px !important;
+  border-end-end-radius: 5px !important;
+}
+.rounded-s-full {
+  border-start-start-radius: 5px !important;
+  border-end-start-radius: 5px !important;
+}
 </style>
