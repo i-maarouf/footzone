@@ -103,7 +103,8 @@
     </div>
     <UModal v-model="action" class="relative" prevent-close>
       <div
-        class="p-4 flex items-center gap-4 flex-col"
+        class="p-4 flex nuxtModal items-center gap-4 flex-col"
+        style=""
         v-if="
           this.typeOfEvent[this.playMinutes.indexOf(this.currentTime - 1)]
             .event == 'chance'
@@ -241,7 +242,7 @@
         </div>
       </div>
       <div
-        class="p-4 flex items-center gap-7 flex-col"
+        class="p-4 flex nuxtModal items-center gap-7 flex-col"
         v-if="
           this.typeOfEvent[this.playMinutes.indexOf(this.currentTime - 1)]
             .event == 'yellowCard'
@@ -274,7 +275,7 @@
         />
       </div>
       <div
-        class="p-4 flex items-center gap-7 flex-col"
+        class="p-4 flex nuxtModal items-center gap-7 flex-col"
         v-if="
           this.typeOfEvent[this.playMinutes.indexOf(this.currentTime - 1)]
             .event == 'redCard'
@@ -308,7 +309,7 @@
       </div>
     </UModal>
     <UModal v-model="matchFinishModal">
-      <div class="innerContainer p-10 gap-4 relative flex flex-col">
+      <div class="innerContainer nuxtModal p-10 gap-4 relative flex flex-col">
         <div class="whistle flex items-center justify-center gap-4">
           <img src="../assets/whistle.svg" class="whistleImage" alt="" />
           <div class="whistleText text-center">Final whistle</div>
@@ -743,7 +744,8 @@ export default {
   height: 380px;
   /* justify-content: space-between; */
   /* margin-top: 50px; */
-  background: #343232;
+
+  background: rgba(0, 0, 0, 0.25);
   border-radius: 20px;
 
   /* overflow-y: scroll; */

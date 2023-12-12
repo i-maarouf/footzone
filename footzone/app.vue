@@ -15,13 +15,17 @@ useHead({
 </style>
 <style>
 body {
-  background: #2b2929;
+  background: #111828;
 }
 ::-webkit-scrollbar-track {
-  background: #2b2929;
+  background: #111828;
   width: 2px;
 }
-
+.nuxtModal {
+  background: #111828 !important;
+  z-index: 999;
+  position: relative;
+}
 .list-disc {
   display: none;
 }
@@ -33,4 +37,21 @@ body {
   border-start-start-radius: 5px !important;
   border-end-start-radius: 5px !important;
 }
+.row,
+.column,
+.flex {
+  flex-wrap: nowrap !important;
+}
+.q-drawer {
+  margin: 20px 10px !important;
+}
+.bg-primary,
+.q-drawer {
+  background: #343232 !important;
+  margin: 10px;
+  border-radius: 10px;
+}
+/* .q-drawer {
+  width: 200px !important;
+} */
 </style>

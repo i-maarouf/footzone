@@ -1,11 +1,6 @@
 <template>
   <section>
     <!-- <template> -->
-    <UVerticalNavigation :links="links">
-      <template #default="{ link }">
-        <span class="group-hover:text-primary relative">{{ link.label }}</span>
-      </template>
-    </UVerticalNavigation>
 
     <div class="mainContainer p-5 container mx-auto">
       <div class="scoreboard w-full py-2">
@@ -221,25 +216,11 @@
     />
   </section>
 </template>
-<script setup>
-const links = [
-  {
-    label: "Vertical Navigation",
-    to: "/navigation/vertical-navigation",
-  },
-  {
-    label: "Command Palette",
-    to: "/navigation/command-palette",
-  },
-  {
-    label: "Table",
-    to: "/data/table",
-  },
-];
-</script>
+
 <script>
 import teams from "../utils/teams";
 export default {
+  name: "matches",
   data() {
     return {
       team1: "",
@@ -373,7 +354,7 @@ export default {
 
 <style scoped>
 .mainContainer {
-  background: #2b2929;
+  background: #111828;
   /* height: 45vh; */
 }
 .scoreboard {
@@ -398,7 +379,7 @@ export default {
   font-size: 18px;
   /* font-style: italic; */
   font-weight: 700;
-  z-index: 99;
+  z-index: 9;
   position: absolute;
   right: 29px;
   top: -3px;
@@ -410,7 +391,7 @@ export default {
   font-size: 18px;
   /* font-style: italic; */
   font-weight: 700;
-  z-index: 99;
+  z-index: 9;
   position: absolute;
   left: 29px;
   top: -3px;
