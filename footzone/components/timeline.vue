@@ -700,6 +700,44 @@ export default {
       };
       this.$emit("getMatchStatistics", statistics);
     },
+    getTeams() {
+      // var myHeaders = new Headers();
+      // myHeaders.append("X-Auth-Token", "93fe5c8a163a4889b26f5d72998ec2eb");
+
+      // var raw = "";
+
+      // var requestOptions = {
+      //   method: "GET",
+      //   headers: myHeaders,
+      //   body: raw,
+      //   redirect: "follow",
+      // };
+
+      // fetch("http://api.football-data.org/v4/matches", requestOptions)
+      //   .then((response) => {
+      //     console.log("res: ", response);
+      //   })
+      //   .catch((error) => console.log("error", error));
+
+      var data = "";
+
+      var config = {
+        method: "get",
+        url: "http://api.football-data.org/v4/matches",
+        headers: {
+          "X-Auth-Token": "93fe5c8a163a4889b26f5d72998ec2eb",
+        },
+        data: data,
+      };
+
+      axios(config)
+        .then(function (response) {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
   },
   mounted() {
     this.getNumberOfChances();
@@ -710,6 +748,7 @@ export default {
 
     this.getMatchStatistics();
     this.playMatch();
+    this.getTeams();
   },
   beforeUpdate() {
     // console.log("this.teamsSelected[0].ELO :" + this.teamsSelected[0].ELO);

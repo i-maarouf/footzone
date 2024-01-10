@@ -2,348 +2,371 @@
   <section>
     <!-- <template> -->
 
-    <div class="mainContainer p-5 container mx-auto">
-      <div class="scoreboard w-full py-2">
-        <div class="team1 w-1/3">
-          <div class="name text-center">
-            {{ team1 }}
-          </div>
-          <div class="card shadow-lg" :style="cardStyle1">
-            <div class="score">{{ team1Score }}</div>
-          </div>
-        </div>
-        <div class="matchStats w-2/3 gap-3">
-          <div class="stat">
-            <div class="statTitle">Possession</div>
-            <div class="innerContainer w-full">
-              <div class="barGraph" style="padding: 0 20px; width: 100%">
-                <div class="numberOfTimes">
-                  {{
-                    matchStatistics.team2.possession > 0
-                      ? Math.trunc(
-                          (matchStatistics.team1.possession /
-                            (matchStatistics.team1.possession +
-                              matchStatistics.team2.possession)) *
-                            100
-                        )
-                      : 0
-                  }}<span style="font-size: 12px">%</span>
-                </div>
-                <UMeterGroup
-                  :min="0"
-                  :max="
-                    matchStatistics.team1.possession +
-                    matchStatistics.team2.possession
-                  "
-                  size="2xl"
-                  :indicator="false"
-                  icon="i-heroicons-minus"
-                >
-                  <UMeter
-                    :value="matchStatistics.team1.possession"
-                    :color="team1TailwindColor"
-                  />
-                  <UMeter
-                    :value="matchStatistics.team2.possession"
-                    :color="team2TailwindColor"
-                  />
-                </UMeterGroup>
-                <div class="numberOfTimes2">
-                  {{
-                    matchStatistics.team2.possession > 0
-                      ? Math.trunc(
-                          (matchStatistics.team2.possession /
-                            (matchStatistics.team1.possession +
-                              matchStatistics.team2.possession)) *
-                            100
-                        )
-                      : 0
-                  }}<span style="font-size: 12px">%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="stat">
-            <div class="statTitle">Attempts On Target</div>
-            <div class="innerContainer w-full">
-              <div
-                class="barGraph"
-                style="padding: 0 20px; width: 100%; position: relative"
-              >
-                <div class="numberOfTimes">
-                  {{ matchStatistics.team1.totalAttempts }}
-                </div>
-                <UMeterGroup
-                  :min="0"
-                  :max="
-                    matchStatistics.team1.totalAttempts +
-                    matchStatistics.team2.totalAttempts
-                  "
-                  size="2xl"
-                  :indicator="false"
-                  icon="i-heroicons-minus"
-                >
-                  <UMeter
-                    :value="matchStatistics.team1.totalAttempts"
-                    :color="team1TailwindColor"
-                  />
-                  <UMeter
-                    :value="matchStatistics.team2.totalAttempts"
-                    :color="team2TailwindColor"
-                  />
-                </UMeterGroup>
-                <div class="numberOfTimes2">
-                  {{ matchStatistics.team2.totalAttempts }}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="stat">
-            <div class="statTitle">Yellow Cards</div>
-            <div class="innerContainer w-full">
-              <div class="barGraph" style="padding: 0 20px; width: 100%">
-                <div class="numberOfTimes">
-                  {{ matchStatistics.team1.yellowCards }}
-                </div>
-                <UMeterGroup
-                  :min="0"
-                  :max="
-                    matchStatistics.team1.yellowCards +
-                    matchStatistics.team2.yellowCards
-                  "
-                  size="2xl"
-                  :indicator="false"
-                  icon="i-heroicons-minus"
-                >
-                  <UMeter
-                    :value="matchStatistics.team1.yellowCards"
-                    :color="team1TailwindColor"
-                  />
-                  <UMeter
-                    :value="matchStatistics.team2.yellowCards"
-                    :color="team2TailwindColor"
-                  />
-                </UMeterGroup>
-                <div class="numberOfTimes2">
-                  {{ matchStatistics.team2.yellowCards }}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="stat">
-            <div class="statTitle">Red Cards</div>
-            <div class="innerContainer w-full">
-              <div class="barGraph" style="padding: 0 20px; width: 100%">
-                <div class="numberOfTimes">
-                  {{ matchStatistics.team1.redCards }}
-                </div>
-                <UMeterGroup
-                  :min="0"
-                  :max="
-                    matchStatistics.team1.redCards +
-                    matchStatistics.team2.redCards
-                  "
-                  size="2xl"
-                  :indicator="false"
-                  icon="i-heroicons-minus"
-                >
-                  <UMeter
-                    :value="matchStatistics.team1.redCards"
-                    :color="team1TailwindColor"
-                  />
-                  <UMeter
-                    :value="matchStatistics.team2.redCards"
-                    :color="team2TailwindColor"
-                  />
-                </UMeterGroup>
-                <div class="numberOfTimes2">
-                  {{ matchStatistics.team2.redCards }}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="stat">
-            <div class="statTitle">Conversion Rate</div>
-            <div class="innerContainer w-full">
-              <div class="barGraph" style="padding: 0 20px; width: 100%">
-                <div class="numberOfTimes">
-                  {{ Math.trunc(matchStatistics.team1.conversionRate)
-                  }}<span style="font-size: 12px">%</span>
-                </div>
-                <UMeterGroup
-                  :min="0"
-                  :max="
-                    matchStatistics.team1.conversionRate +
-                    matchStatistics.team2.conversionRate
-                  "
-                  size="2xl"
-                  :indicator="false"
-                  icon="i-heroicons-minus"
-                >
-                  <UMeter
-                    :value="matchStatistics.team1.conversionRate"
-                    :color="team1TailwindColor"
-                  />
-                  <UMeter
-                    :value="matchStatistics.team2.conversionRate"
-                    :color="team2TailwindColor"
-                  />
-                </UMeterGroup>
-                <div class="numberOfTimes2">
-                  {{ Math.trunc(matchStatistics.team2.conversionRate)
-                  }}<span style="font-size: 12px">%</span>
-                </div>
-              </div>
-            </div>
+    <div
+      class="p-5 mx-auto flex flex-col aling-center justify-center"
+      v-if="matches.length != 0"
+    >
+      <div
+        :class="
+          teamSelected.runningCompetitions[0].name == 'Premier League'
+            ? 'teamSelected2 fadeIn premierLeagueBG'
+            : teamSelected.runningCompetitions[0].name == 'Primera Division'
+            ? 'teamSelected2 fadeIn laLigaBG'
+            : teamSelected.runningCompetitions[0].name == 'Serie A'
+            ? 'teamSelected2 fadeIn serieABG'
+            : teamSelected.runningCompetitions[0].name == 'Bundesliga'
+            ? 'teamSelected2 fadeIn bundesligaBG'
+            : teamSelected.runningCompetitions[0].name == 'Ligue 1'
+            ? 'teamSelected2 fadeIn ligue1BG'
+            : teamSelected.runningCompetitions[0].name ==
+              'UEFA Champions League'
+            ? 'teamSelected2 fadeIn uclBG'
+            : 'teamSelected2 fadeIn'
+        "
+      >
+        <div class="teamLeague w-1/3 flex items-center gap-0">
+          <img
+            :src="teamSelected.runningCompetitions[0].emblem"
+            alt=""
+            style="width: 64px; max-height: 50px; object-fit: contain"
+          />
+          <div class="teamName">
+            {{ teamSelected.runningCompetitions[0].name }}
           </div>
         </div>
-        <div class="team2 w-1/3">
-          <div class="name text-center">
-            {{ team2 }}
+        <div class="teamSelectedInfo fadeIn flex items-center gap-3">
+          <img
+            :src="teamSelected.crest"
+            class="fadeIn"
+            alt=""
+            style="width: 64px; max-height: 64px"
+          />
+          <div class="teamName">
+            {{ teamSelected.name }}
           </div>
-          <div class="card2 shadow-lg" :style="cardStyle2">
-            <div class="score">{{ team2Score }}</div>
+        </div>
+        <div class="removeBtn w-1/3 flex justify-end">
+          <!-- <UButton
+            variant="soft"
+            icon="i-heroicons-chevron-double-right"
+            :trailing="true"
+            label="Continue"
+            @click="generateMatches()"
+          /> -->
+        </div>
+      </div>
+      <div
+        class="fixtures flex items-center gap-2"
+        v-for="(opponents, index) in matches"
+        :key="opponents.id"
+      >
+        <div class="MD flex items-center">MD {{ index + 1 }}</div>
+        <div class="fixtureInfo w-full flex items-center justify-between gap-2">
+          <div class="selectedTeam flex items-center w-1/3 gap-4">
+            <img
+              :src="teamSelected.crest"
+              class="fadeIn"
+              alt=""
+              style="width: 43px; max-height: 43px"
+            />
+            <div class="teamName">
+              {{ teamSelected.name }}
+            </div>
+          </div>
+          <div class="vs">VS</div>
+          <div class="opponent flex items-center justify-end w-1/3 gap-4">
+            <div class="teamName">
+              {{ opponents.name }}
+            </div>
+            <img
+              :src="opponents.crest"
+              class="fadeIn"
+              alt=""
+              style="width: 43px; max-height: 43px"
+            />
           </div>
         </div>
       </div>
     </div>
+    <div
+      class="mainContainer p-5 container mx-auto flex flex-col aling-center justify-center"
+      v-if="matches.length == 0"
+    >
+      <div class="mainTitle text-center mb-10">
+        Select the club you want to manage
+      </div>
+      <div class="leagues flex flex-col justify-between items-center">
+        <UAccordion
+          :items="items"
+          :ui="{ wrapper: 'flex flex-col w-full' }"
+          class="gap-5"
+        >
+          <template #default="{ item }">
+            <UButton
+              variant="ghost"
+              class="border-b border-gray-200 dark:border-gray-700 leagueBackground"
+              :ui="{
+                padding: { sm: 'px-3' },
+              }"
+            >
+              <template #leading>
+                <div class="league w-1/3">
+                  <div class="imgContainer">
+                    <img
+                      :src="item.leadingIcon"
+                      style="width: 47px; z-index: 99; position: relative"
+                      class="leagueLogo"
+                    />
+                  </div>
+                </div>
+              </template>
+              <img :src="item.trailingIcon" class="outerImage" alt="" />
 
-    <Timeline
-      :teamsSelected="teamsSelected"
-      @changeTeam1Score="getTeam1Score($event)"
-      @changeTeam2Score="getTeam2Score($event)"
-      @getMatchStatistics="getMatchStatistics($event)"
-    />
+              <span class="truncate leagueName"> {{ item.label }}</span>
+
+              <template #trailing>
+                <div class="teams flex items-center justify-end gap-2 w-1/3">
+                  20 Teams
+                  <img
+                    src="../assets/angle-circle-down-icon 1.png"
+                    style="width: 16px"
+                    alt=""
+                  />
+                </div>
+              </template>
+            </UButton>
+          </template>
+          <template #premier-league>
+            <UButton
+              class="team w-full"
+              variant="ghost"
+              @click="selectTeam(teams)"
+              v-for="teams in leagues[2].teams"
+              :key="teams.name"
+            >
+              <img
+                :src="teams.crest"
+                alt=""
+                style="width: 32px; max-height: 50px"
+              />
+              {{ teams.name }}
+            </UButton>
+          </template>
+          <template #la-liga>
+            <UButton
+              class="team w-full"
+              variant="ghost"
+              @click="selectTeam(teams)"
+              v-for="teams in leagues[1].teams"
+              :key="teams.name"
+            >
+              <img :src="teams.crest" alt="" style="width: 32px" />
+              {{ teams.name }}
+            </UButton>
+          </template>
+          <template #bundesliga>
+            <UButton
+              class="team w-full"
+              variant="ghost"
+              @click="selectTeam(teams)"
+              v-for="teams in leagues[3].teams"
+              :key="teams.name"
+            >
+              <img :src="teams.crest" alt="" style="width: 32px" />
+              {{ teams.name }}
+            </UButton>
+          </template>
+          <template #serie-a>
+            <UButton
+              class="team w-full"
+              variant="ghost"
+              @click="selectTeam(teams)"
+              v-for="teams in leagues[4].teams"
+              :key="teams.name"
+            >
+              <img
+                :src="teams.crest"
+                alt=""
+                style="width: 32px; max-height: 50px"
+              />
+              {{ teams.name }}
+            </UButton>
+          </template>
+          <template #ligue-1>
+            <UButton
+              class="team w-full"
+              variant="ghost"
+              @click="selectTeam(teams)"
+              v-for="teams in leagues[0].teams"
+              :key="teams.name"
+            >
+              <img :src="teams.crest" alt="" style="width: 32px" />
+              {{ teams.name }}
+            </UButton>
+          </template>
+          <template #ucl>
+            <UButton
+              class="team w-full"
+              variant="ghost"
+              @click="selectTeam(teams)"
+              v-for="teams in leagues[5].teams"
+              :key="teams.name"
+            >
+              <img :src="teams.crest" alt="" style="width: 32px" />
+              {{ teams.name }}
+            </UButton>
+          </template>
+        </UAccordion>
+      </div>
+    </div>
+    <div class="teamSelected fadeIn" v-if="teamSelected && matches.length == 0">
+      <div class="teamLeague w-1/3 flex items-center gap-0">
+        <img
+          :src="teamSelected.runningCompetitions[0].emblem"
+          alt=""
+          style="width: 64px; max-height: 50px; object-fit: contain"
+        />
+        <div class="teamName">
+          {{ teamSelected.runningCompetitions[0].name }}
+        </div>
+      </div>
+      <div class="teamSelectedInfo fadeIn flex items-center gap-3">
+        <img
+          :src="teamSelected.crest"
+          class="fadeIn"
+          alt=""
+          style="width: 64px; max-height: 64px"
+        />
+        <div class="teamName">
+          {{ teamSelected.name }}
+        </div>
+      </div>
+      <div class="removeBtn w-1/3 flex justify-end">
+        <UButton
+          variant="soft"
+          icon="i-heroicons-chevron-double-right"
+          :trailing="true"
+          label="Continue"
+          @click="generateMatches()"
+        />
+      </div>
+    </div>
   </section>
 </template>
 
 <script>
-import teams from "../utils/teams";
+import leagues from "../utils/teams";
+import { supabase } from "../src/lib/supabaseClient";
+import { useUserStore } from "~/store/useUserStore";
+
 export default {
-  name: "matches",
+  name: "index",
   data() {
     return {
-      team1: "",
-      team2: "",
-      team1Score: 0,
-      team2Score: 0,
-      matchStatistics: {
-        team1: {
-          possession: 0,
-          totalAttempts: 0,
-          conversionRate: 0,
-          redCards: 0,
-          yellowCards: 0,
+      showPL: false,
+      leagues: leagues,
+      matches: [],
+      items: [
+        {
+          label: "Premier League",
+          leadingIcon: "./leagues/premier-league.svg",
+          trailingIcon: "./leagues/PL.svg",
+          slot: "premier-league",
         },
-        team2: {
-          possession: 0,
-          totalAttempts: 0,
-          conversionRate: 0,
-          redCards: 0,
-          yellowCards: 0,
+        {
+          label: "La Liga",
+          leadingIcon: "./leagues/laliga-white.svg",
+          trailingIcon: "./leagues/laLigaOffwhite.svg",
+          slot: "la-liga",
         },
-      },
-      teams: teams,
-      teamsSelected: [],
+        {
+          label: "Bundesliga",
+          leadingIcon: "./leagues/bundesligawhite.svg",
+          trailingIcon: "./leagues/BLGrey.svg",
+          slot: "bundesliga",
+        },
+        {
+          label: "Serie A",
+          leadingIcon: "./leagues/serie-a.svg",
+          trailingIcon: "./leagues/SerieAWhite.svg",
+          slot: "serie-a",
+        },
+        {
+          label: "Ligue 1",
+          leadingIcon: "./leagues/ligue_1.svg",
+          trailingIcon: "./leagues/Ligue1White.svg",
+          slot: "ligue-1",
+        },
+        {
+          label: "UEFA Champions League",
+          leadingIcon: "./leagues/UEFAChampionsLeagueWhite.svg",
+          trailingIcon: "./leagues/UCLOffWhite.svg",
+          slot: "ucl",
+        },
+      ],
+      user: [],
+      teamSelected: "",
     };
   },
   mounted() {
-    this.getTeams();
+    this.getUserData();
   },
   beforeUpdate() {},
-  methods: {
-    getTeam1Score(score) {
-      console.log("Changing score: " + score);
-      this.team1Score = score;
-    },
-    getTeam2Score(score) {
-      console.log("Changing score: " + score);
-      this.team2Score = score;
-    },
-    getMatchStatistics(statistics) {
-      this.matchStatistics = statistics;
-    },
-    getTeams() {
-      for (let i = 0; i < 2; i++) {
-        let indexOfTeam = Math.floor(Math.random() * this.teams.length);
-        console.log("index: " + indexOfTeam);
-        let teamSelected = this.teams[indexOfTeam];
-        console.log("teamSelected: " + teamSelected);
+  computed: {},
 
-        if (!this.teamsSelected.includes(teamSelected)) {
-          this.teamsSelected.push(teamSelected);
+  methods: {
+    generateMatches() {
+      let leagues = [
+        "Ligue 1",
+        "Primera Division",
+        "Premier League",
+        "Bundesliga",
+        "Serie A",
+        "UEFA Champions League",
+      ];
+      let index = leagues.lastIndexOf(
+        this.teamSelected.runningCompetitions[0].name
+      );
+
+      for (let i = 0; i < this.leagues[index].teams.length - 1; i++) {
+        let random = Math.floor(
+          Math.random() * this.leagues[index].teams.length
+        );
+        if (
+          !this.matches.includes(this.leagues[index].teams[random]) &&
+          this.teamSelected.name != this.leagues[index].teams[random].name
+        ) {
+          this.matches.push(this.leagues[index].teams[random]);
         } else {
           i--;
         }
+        // console.log(i, " : ", random);
       }
-      this.team1 = this.teamsSelected[0].name;
-      this.team2 = this.teamsSelected[1].name;
+      this.updateUserTeam();
+
+      console.log("numbers", this.matches);
     },
-  },
-  computed: {
-    team1TailwindColor() {
-      // Assuming matchStatistics.team1.colors.primary is in the format "#RRGGBB"
-      if (this.teamsSelected[0]) {
-        const primaryColor = this.teamsSelected[0].colors.primary;
+    async updateUserTeam() {
+      const userStore = useUserStore();
 
-        // Map the primary color to the closest Tailwind CSS color variable
-        // You may need to adjust this mapping based on your specific color scheme
-        const colorMapping = {
-          "#fff": "white",
-          "#D00027": "red",
-          "#00A398": "slate",
-          "#FDE100": "teal",
-          "#004d98": "cyan",
-          "#DC052D": "stone",
-          // Add more mappings as needed
-        };
-
-        // Default to 'red-500' if the primary color is not found in the mapping
-        return colorMapping[primaryColor];
+      const { data, error } = await supabase
+        .from("teams")
+        .update({ team: this.teamSelected })
+        .eq("username", userStore.user.user_metadata.username)
+        .select("");
+    },
+    selectTeam(team) {
+      this.teamSelected = team;
+    },
+    showPLTeams() {
+      this.showPL = !this.showPL;
+      for (let i = 0; i < this.leagues.length; i++) {
+        console.log("league: ", this.leagues[i]);
       }
     },
-    team2TailwindColor() {
-      // Assuming matchStatistics.team1.colors.primary is in the format "#RRGGBB"
-      if (this.teamsSelected[1]) {
-        const primaryColor = this.teamsSelected[1].colors.primary;
-
-        // Map the primary color to the closest Tailwind CSS color variable
-        // You may need to adjust this mapping based on your specific color scheme
-        const colorMapping = {
-          "#fff": "white",
-          "#D00027": "red",
-          "#00A398": "slate",
-          "#FDE100": "teal",
-          "#004d98": "cyan",
-          "#DC052D": "stone",
-          // Add more mappings as needed
-        };
-
-        // Default to 'red-500' if the primary color is not found in the mapping
-        return colorMapping[primaryColor];
-      }
-    },
-    cardStyle1() {
-      if (this.teamsSelected[0]) {
-        const primaryColor = this.teamsSelected[0].colors.primary;
-        const secondaryColor = this.teamsSelected[0].colors.secondary;
-        const thirdColor = this.teamsSelected[0].colors.third;
-        return {
-          background: `linear-gradient(315deg, rgba(0, 0, 0, 0) 70.26%, ${thirdColor} 116.8%), linear-gradient(131deg, ${primaryColor} -2.76%, ${secondaryColor} 123.04%)`,
-          // Add more styles as needed
-        };
-      }
-    },
-    cardStyle2() {
-      if (this.teamsSelected[1]) {
-        const primaryColor = this.teamsSelected[1].colors.primary;
-        const secondaryColor = this.teamsSelected[1].colors.secondary;
-        const thirdColor = this.teamsSelected[1].colors.third;
-        return {
-          background: `linear-gradient(315deg, rgba(0, 0, 0, 0) 70.26%, ${thirdColor} 116.8%), linear-gradient(131deg, ${primaryColor} -2.76%, ${secondaryColor} 123.04%)`,
-          // Add more styles as needed
-        };
-      }
+    async getUserData() {
+      const { data } = await supabase.from("users").select();
+      console.log("data", data);
     },
   },
 };
@@ -353,157 +376,250 @@ export default {
 </style>
 
 <style scoped>
-.mainContainer {
-  background: #111828;
-  /* height: 45vh; */
-}
-.scoreboard {
-  display: flex;
-  align-items: flex-end;
-  /* border-bottom: 5px solid #3c3c3c; */
-  justify-content: space-between;
-}
-.matchStats {
-  padding: 0 50px;
-  display: flex;
-  flex-direction: column;
-}
-.innerContainer {
-  justify-content: center;
-  display: flex;
-  align-items: center;
-}
-.numberOfTimes2 {
+.mainTitle {
   color: #fff;
-  font-family: Poppins;
-  font-size: 18px;
-  /* font-style: italic; */
-  font-weight: 700;
-  z-index: 9;
-  position: absolute;
-  right: 29px;
-  top: -3px;
-  line-height: normal;
-}
-.numberOfTimes {
-  color: #fff;
-  font-family: Poppins;
-  font-size: 18px;
-  /* font-style: italic; */
-  font-weight: 700;
-  z-index: 9;
-  position: absolute;
-  left: 29px;
-  top: -3px;
-  line-height: normal;
-}
-.barGraph {
-  position: relative;
-}
-.stat {
-  display: flex;
-  row-gap: 10px;
-  align-items: center;
-  /* align-self: center; */
-  justify-content: center;
-  flex-direction: column;
-}
-.statTitle {
-  color: #c0c1d6;
-  font-family: Poppins;
-  font-size: 20px;
-  font-style: italic;
-  font-weight: 700;
-  line-height: normal;
-}
-.team1,
-.team2 {
-  display: flex;
-  flex-direction: column;
-  row-gap: 5px;
-  max-width: 300px;
-}
-.card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
-  border-radius: 20px;
-  min-width: 300px;
-  /* border: 1px solid #d1d1dc; */
-  /* background: #3c3c3c; */
-  /* background: linear-gradient(315deg, rgba(0, 0, 0, 0) 70.26%, #febe10a3 116.8%),
-    linear-gradient(131deg, #fff -2.76%, #00529f76 123.04%); */
-
-  backdrop-filter: blur(5px);
-}
-.card2 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
-  border-radius: 20px;
-  min-width: 300px;
-  /* border: 1px solid #d1d1dc; */
-  /* background: #3c3c3c; */
-  background: linear-gradient(315deg, rgba(0, 0, 0, 0) 0.26%, #a50044 156.8%),
-    linear-gradient(91deg, #3c3c3c 0.76%, #004d98 123.04%);
-
-  backdrop-filter: blur(5px);
-}
-.score {
-  color: rgba(0, 0, 0, 0.45);
-  font-family: Poppins;
-  font-size: 201px;
-  /* font-style: italic; */
-  font-weight: 700;
-  line-height: normal;
-}
-.name {
-  color: #c0c1d6;
   font-family: Poppins;
   font-size: 40px;
-  /* font-style: italic; */
+  font-style: normal;
+  font-weight: 700;
+
+  line-height: normal;
+}
+.league {
+  height: 55px;
+  /* width: 100%; */
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  /* padding: 0 10px; */
+  transition: 0.25s all ease-in-out;
+}
+.outerImage {
+  position: absolute;
+  left: 0px;
+
+  width: 100px;
+  height: 100px;
+}
+.imgContainer {
+  z-index: 1;
+}
+.leagueBackground:nth-child(n) {
+  background: linear-gradient(93deg, #31a5ca 47.17%, #252a9d 74.7%);
+  justify-content: space-between;
+  padding: 0 10px;
+  position: relative;
+  transition: 0.25s all ease-in-out;
+  overflow: hidden;
+}
+/* .PL {
+  background: linear-gradient(93deg, #31a5ca 47.17%, #252a9d 74.7%);
+  justify-content: space-between;
+  padding: 0 10px;
+  position: relative;
+  overflow: hidden;
+} */
+.leagueBackground:nth-child(n + 2) {
+  background: linear-gradient(93deg, #c93833 47.17%, #000 100.7%);
+  justify-content: space-between;
+  padding: 0 10px;
+  transition: 0.25s all ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+.leagueBackground:nth-child(n + 4) {
+  background: linear-gradient(93deg, #d10214 47.17%, #721515 74.7%);
+  justify-content: space-between;
+  transition: 0.25s all ease-in-out;
+  padding: 0 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.leagueBackground:nth-child(n + 6) {
+  background: linear-gradient(
+    91deg,
+    #29488d 49.55%,
+    rgba(54, 53, 140, 0.4) 85.62%
+  );
+  justify-content: space-between;
+  padding: 0 10px;
+  transition: 0.25s all ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+.leagueBackground:nth-child(n + 8) {
+  background: linear-gradient(91deg, #243d7f 49.55%, #06c167 85.62%);
+  justify-content: space-between;
+  transition: 0.25s all ease-in-out;
+  padding: 0 10px;
+  position: relative;
+  overflow: hidden;
+}
+.leagueBackground:nth-child(n + 10) {
+  background: linear-gradient(93deg, #252a9d 47.17%, #3b2050 74.7%);
+
+  justify-content: space-between;
+  transition: 0.25s all ease-in-out;
+  padding: 0 10px;
+  position: relative;
+  overflow: hidden;
+}
+.leagueBackground:nth-child(n + 6) .leagueLogo {
+  width: 28px !important;
+}
+.leagueBackground:nth-child(n + 8) .leagueLogo {
+  width: 32px !important;
+}
+.leagueBackground:nth-child(n + 10) .leagueLogo {
+  width: 55px !important;
+}
+.leagueBackground:nth-child(n):hover {
+  box-shadow: 0px 0px 9.6px 1px #3a69ce;
+}
+.leagueBackground:nth-child(n + 2):hover {
+  box-shadow: 0px 0px 9.6px 1px #c93833;
+}
+.leagueBackground:nth-child(n + 4):hover {
+  box-shadow: 0px 0px 9.6px 1px #d10214;
+}
+.leagueBackground:nth-child(n + 6):hover {
+  box-shadow: 0px 0px 9.6px 1px #3f6cce;
+}
+.leagueBackground:nth-child(n + 8):hover {
+  box-shadow: 0px 0px 9.6px 1px #06c167;
+}
+.leagueBackground:nth-child(n + 10):hover {
+  box-shadow: 0px 0px 9.6px 1px #5c10e0;
+}
+.leagueName {
+  color: #fff;
+  font-family: Poppins;
+  font-size: 30px;
+  font-style: normal;
   font-weight: 700;
   line-height: normal;
 }
-</style>
-<style>
-:is(.dark .dark\:text-cyan-400) {
-  color: #a50044 !important;
+
+.teamSelected {
+  background: #06703d;
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  width: 100%;
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  align-items: center;
+  z-index: 9;
+  justify-content: space-between;
 }
-:is(.dark .dark\:bg-cyan-400) {
-  background: #a50044 !important;
+.premierLeagueBG {
+  background: linear-gradient(93deg, #31a5ca 47.17%, #252a9d 74.7%);
 }
-:is(.dark .dark\:text-slate-400) {
-  color: #00a398 !important;
+.laLigaBG {
+  background: linear-gradient(93deg, #c93833 47.17%, #000 100.7%);
 }
-:is(.dark .dark\:bg-slate-400) {
-  background: #00a398 !important;
+.serieABG {
+  background: linear-gradient(
+    91deg,
+    #29488d 49.55%,
+    rgba(54, 53, 140, 0.4) 85.62%
+  );
 }
-:is(.dark .dark\:text-teal-400) {
-  color: #fde100 !important;
+.bundesligaBG {
+  background: linear-gradient(93deg, #d10214 47.17%, #721515 74.7%);
 }
-:is(.dark .dark\:bg-teal-400) {
-  background: #fde100 !important;
+.ligue1BG {
+  background: linear-gradient(91deg, #243d7f 49.55%, #06c167 85.62%);
 }
-:is(.dark .dark\:text-white-400) {
-  color: #94a3b8 !important;
+.uclBG {
+  background: linear-gradient(93deg, #252a9d 47.17%, #3b2050 74.7%);
 }
-:is(.dark .dark\:bg-white-400) {
-  color: #94a3b8 !important;
-  background: #94a3b8 !important;
+.MD {
+  background: #0d121e;
+  padding: 10px;
+  width: 70px;
+  color: #fff;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
-:is(.dark .dark\:text-red-400) {
-  color: #d00027 !important;
+.opponent .teamName {
+  color: #c0c1d6;
+  font-family: Poppins;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
-:is(.dark .dark\:bg-red-400) {
-  background: #d00027 !important;
+.fixtures {
+  padding: 10px 0;
 }
-:is(.dark .dark\:text-stone-400) {
-  color: #dc052d !important;
+.vs {
+  color: #fff;
+  font-family: Poppins;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
-:is(.dark .dark\:bg-stone-400) {
-  background: #dc052d !important;
+.fixtureInfo {
+  padding: 10px 0;
+}
+.teamSelected2 {
+  /* background: linear-gradient(93deg, #31a5ca 47.17%, #252a9d 74.7%); */
+
+  display: flex;
+  width: 100%;
+  padding: 5px 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  align-items: center;
+  z-index: 9;
+  justify-content: space-between;
+}
+
+.teamName {
+  color: #fff;
+  font-family: Poppins;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.fadeIn {
+  animation: fadeIn 0.25s;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.teams {
+  color: #fff;
+  font-family: Poppins;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.team {
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
+  color: white;
+  margin-bottom: 10px;
 }
 </style>
