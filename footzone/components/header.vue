@@ -85,7 +85,7 @@ import { useUserStore } from "~/store/useUserStore";
 export default {
   data() {
     return {
-      routeName: "",
+      // routeName: "",
       loading: false,
 
       // user: {},
@@ -128,8 +128,6 @@ export default {
       });
       this.$router.push({ path: "/signup" });
     }
-
-    this.routeName = this.$route.name;
     this.getUserData().then(() => {
       this.getUserBalance();
     });
@@ -173,9 +171,12 @@ export default {
       this.$router.push({ path: "/login" });
     },
   },
-  async beforeMounted() {},
-  beforeUpdate() {
-    this.routeName = this.$route.name;
+  computed: {
+    routeName() {
+      if (this.$route.name == "index") {
+        return "home";
+      } else return this.$route.name;
+    },
   },
 };
 </script>

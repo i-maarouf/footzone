@@ -15,7 +15,7 @@
         srcset=""
         :class="type == 'pick' ? 'playerImage2' : 'playerImage'"
       />
-      <div class="overall">
+      <!-- <div class="overall">
         <img src="../assets/teams/real-madrid.svg" style="width: 22px" alt="" />
         <div class="playerOverall">
           {{ player.overall }}
@@ -25,7 +25,7 @@
           style="width: 22px"
           alt=""
         />
-      </div>
+      </div> -->
 
       <!-- <UButton icon="i-heroicons-inbox" color="gray" /> -->
     </div>
@@ -34,7 +34,7 @@
 
 <script>
 export default {
-  name: "Player",
+  name: "PlayerPick",
   props: {
     player: Object,
     type: String,
@@ -101,7 +101,7 @@ export default {
   max-width: 167px;
 }
 .playerImage2 {
-  max-width: 100px;
+  max-width: 120px;
 }
 .overall {
   border-radius: 0px 0px 20px 20px;
@@ -138,7 +138,7 @@ export default {
 .playerPos {
   color: #fff;
   font-family: Poppins;
-  font-size: 14px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 300;
   line-height: normal;

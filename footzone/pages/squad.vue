@@ -6,6 +6,20 @@
           <Player :player="player" />
         </div>
       </div>
+
+      <div
+        class="flex items-center space-x-4 justify-between"
+        v-if="playersLoading"
+      >
+        <USkeleton class="h-72 w-52" style="border-radius: 20px" />
+        <USkeleton class="h-72 w-52" style="border-radius: 20px" />
+        <USkeleton class="h-72 w-52" style="border-radius: 20px" />
+        <USkeleton class="h-72 w-52" style="border-radius: 20px" />
+        <USkeleton class="h-72 w-52" style="border-radius: 20px" />
+        <USkeleton class="h-72 w-52" style="border-radius: 20px" />
+        <USkeleton class="h-72 w-52" style="border-radius: 20px" />
+      </div>
+
       <UPagination v-model="page" :page-count="5" :total="players.length" />
     </div>
   </section>
@@ -21,6 +35,7 @@ export default {
     return {
       user: {},
       page: 1,
+      playersLoading: true,
       players: [],
     };
   },
@@ -51,6 +66,7 @@ export default {
         .select("players")
         .eq("username", this.user.user_metadata.username);
       this.players = data[0].players;
+      this.playersLoading = false;
       this.players.sort((a, b) => b.overall - a.overall);
       console.log("data", this.players);
       // this.userPlayers= data

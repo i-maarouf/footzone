@@ -1,96 +1,20 @@
 <template>
   <section>
-    <!-- <template> -->
-
-    <div
-      class="p-5 mx-auto flex flex-col aling-center justify-center"
-      v-if="matches.length != 0"
-    >
-      <div
-        :class="
-          teamSelected.runningCompetitions[0].name == 'Premier League'
-            ? 'teamSelected2 fadeIn premierLeagueBG'
-            : teamSelected.runningCompetitions[0].name == 'Primera Division'
-            ? 'teamSelected2 fadeIn laLigaBG'
-            : teamSelected.runningCompetitions[0].name == 'Serie A'
-            ? 'teamSelected2 fadeIn serieABG'
-            : teamSelected.runningCompetitions[0].name == 'Bundesliga'
-            ? 'teamSelected2 fadeIn bundesligaBG'
-            : teamSelected.runningCompetitions[0].name == 'Ligue 1'
-            ? 'teamSelected2 fadeIn ligue1BG'
-            : teamSelected.runningCompetitions[0].name ==
-              'UEFA Champions League'
-            ? 'teamSelected2 fadeIn uclBG'
-            : 'teamSelected2 fadeIn'
-        "
-      >
-        <div class="teamLeague w-1/3 flex items-center gap-0">
-          <img
-            :src="teamSelected.runningCompetitions[0].emblem"
-            alt=""
-            style="width: 64px; max-height: 50px; object-fit: contain"
-          />
-          <div class="teamName">
-            {{ teamSelected.runningCompetitions[0].name }}
-          </div>
-        </div>
-        <div class="teamSelectedInfo fadeIn flex items-center gap-3">
-          <img
-            :src="teamSelected.crest"
-            class="fadeIn"
-            alt=""
-            style="width: 64px; max-height: 64px"
-          />
-          <div class="teamName">
-            {{ teamSelected.name }}
-          </div>
-        </div>
-        <div class="removeBtn w-1/3 flex justify-end">
-          <!-- <UButton
-            variant="soft"
-            icon="i-heroicons-chevron-double-right"
-            :trailing="true"
-            label="Continue"
-            @click="generateMatches()"
-          /> -->
-        </div>
-      </div>
-      <div
-        class="fixtures flex items-center gap-2"
-        v-for="(opponents, index) in matches"
-        :key="opponents.id"
-      >
-        <div class="MD flex items-center">MD {{ index + 1 }}</div>
-        <div class="fixtureInfo w-full flex items-center justify-between gap-2">
-          <div class="selectedTeam flex items-center w-1/3 gap-4">
-            <img
-              :src="teamSelected.crest"
-              class="fadeIn"
-              alt=""
-              style="width: 43px; max-height: 43px"
-            />
-            <div class="teamName">
-              {{ teamSelected.name }}
-            </div>
-          </div>
-          <div class="vs">VS</div>
-          <div class="opponent flex items-center justify-end w-1/3 gap-4">
-            <div class="teamName">
-              {{ opponents.name }}
-            </div>
-            <img
-              :src="opponents.crest"
-              class="fadeIn"
-              alt=""
-              style="width: 43px; max-height: 43px"
-            />
-          </div>
-        </div>
+    <div class="flex items-center space-x-4" v-if="loading">
+      <USkeleton class="h-12 w-12" :ui="{ rounded: 'rounded-full' }" />
+      <div class="space-y-2">
+        <USkeleton class="h-4 w-[250px]" />
+        <USkeleton class="h-4 w-[200px]" />
       </div>
     </div>
+    <LeagueFixtures
+      :fixtures="fixtures"
+      :teamSelected="teamSelected"
+      v-if="fixtures.length > 0 && !loading"
+    />
     <div
       class="mainContainer p-5 container mx-auto flex flex-col aling-center justify-center"
-      v-if="matches.length == 0"
+      v-if="fixtures.length == 0 && !loading"
     >
       <div class="mainTitle text-center mb-10">
         Select the club you want to manage
@@ -104,6 +28,7 @@
           <template #default="{ item }">
             <UButton
               variant="ghost"
+              color="indigo"
               class="border-b border-gray-200 dark:border-gray-700 leagueBackground"
               :ui="{
                 padding: { sm: 'px-3' },
@@ -139,7 +64,8 @@
           <template #premier-league>
             <UButton
               class="team w-full"
-              variant="ghost"
+              variant="soft"
+              color="indigo"
               @click="selectTeam(teams)"
               v-for="teams in leagues[2].teams"
               :key="teams.name"
@@ -219,7 +145,10 @@
         </UAccordion>
       </div>
     </div>
-    <div class="teamSelected fadeIn" v-if="teamSelected && matches.length == 0">
+    <div
+      class="teamSelected fadeIn"
+      v-if="teamSelected && fixtures.length == 0 && !loading"
+    >
       <div class="teamLeague w-1/3 flex items-center gap-0">
         <img
           :src="teamSelected.runningCompetitions[0].emblem"
@@ -305,17 +234,25 @@ export default {
         },
       ],
       user: [],
+      loading: true,
+      fixtures: [],
       teamSelected: "",
     };
   },
   mounted() {
-    this.getUserData();
+    this.getUserData().then(() => {
+      this.getUserTeam();
+      this.getUserMatches().then(() => {
+        this.loading = false;
+      });
+    });
   },
   beforeUpdate() {},
   computed: {},
 
   methods: {
     generateMatches() {
+      this.updateUserTeam();
       let leagues = [
         "Ligue 1",
         "Primera Division",
@@ -327,25 +264,35 @@ export default {
       let index = leagues.lastIndexOf(
         this.teamSelected.runningCompetitions[0].name
       );
+      let teams = this.leagues[index].teams.map((team) => team);
+      const numberOfRounds = teams.length - 1;
+      const noOfMatches = teams.length / 2;
 
-      for (let i = 0; i < this.leagues[index].teams.length - 1; i++) {
-        let random = Math.floor(
-          Math.random() * this.leagues[index].teams.length
-        );
-        if (
-          !this.matches.includes(this.leagues[index].teams[random]) &&
-          this.teamSelected.name != this.leagues[index].teams[random].name
-        ) {
-          this.matches.push(this.leagues[index].teams[random]);
-        } else {
-          i--;
+      const numTeams = teams.length;
+
+      const fixtures = [];
+      this.shuffle(teams);
+
+      for (let day = 0; day < numberOfRounds; day++) {
+        const matchDay = [];
+        for (let i = 0; i < noOfMatches; i++) {
+          const team1 = teams[i];
+          const team2 = teams[numTeams - 1 - i];
+
+          if (team1 && team2) {
+            matchDay.push({ team1, team2 });
+          }
         }
-        // console.log(i, " : ", random);
-      }
-      this.updateUserTeam();
+        this.shuffle(matchDay);
 
-      console.log("numbers", this.matches);
+        fixtures.push(matchDay);
+
+        teams.splice(1, 0, teams.pop());
+      }
+      this.fixtures = fixtures;
+      this.updateUserLeagueFixtures();
     },
+
     async updateUserTeam() {
       const userStore = useUserStore();
 
@@ -355,18 +302,60 @@ export default {
         .eq("username", userStore.user.user_metadata.username)
         .select("");
     },
+    async updateUserLeagueFixtures() {
+      const userStore = useUserStore();
+
+      const { data, error } = await supabase
+        .from("fixtures")
+        .update({ fixtures: this.fixtures })
+        .eq("username", userStore.user.user_metadata.username)
+        .select("");
+    },
+    async getUserMatches() {
+      const userStore = useUserStore();
+
+      const { data, error } = await supabase
+        .from("fixtures")
+        .select("fixtures")
+        .eq("username", userStore.user.user_metadata.username);
+
+      if (data) {
+        this.fixtures = data[0].fixtures;
+        console.log("data", data);
+      }
+    },
+    async getUserTeam() {
+      const userStore = useUserStore();
+
+      const { data, error } = await supabase
+        .from("teams")
+        .select("team")
+        .eq("username", userStore.user.user_metadata.username);
+
+      if (data) {
+        this.teamSelected = data[0].team;
+        console.log("data", data);
+      }
+    },
     selectTeam(team) {
       this.teamSelected = team;
     },
-    showPLTeams() {
-      this.showPL = !this.showPL;
-      for (let i = 0; i < this.leagues.length; i++) {
-        console.log("league: ", this.leagues[i]);
+
+    shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
       }
     },
+
     async getUserData() {
-      const { data } = await supabase.from("users").select();
-      console.log("data", data);
+      // this.loading = true;
+      const { data, error } = await supabase.from("users").select();
+      // .then(() => {
+      //   this.getUserMatches();
+      //   this.getUserTeam();
+      // });
+      if (data) console.log("data", data);
     },
   },
 };
@@ -505,7 +494,7 @@ export default {
 }
 
 .teamSelected {
-  background: #06703d;
+  background: #252c37;
   position: fixed;
   bottom: 0;
   display: flex;

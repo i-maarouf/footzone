@@ -88,5 +88,39 @@ const packs = [
       secondary: "rgba(0,0,0,0.55)",
     },
   },
+  {
+    name: "FootZone 81+ Player Pick",
+    cost: {
+      coins: 30000,
+      points: 1000,
+    },
+    desc: "Pick 1 of 3 players rated 81 or higher",
+    noOfPlayers: 3,
+    minRating: 81,
+    type: "pick",
+    colors: {
+      primary: "#ef233c",
+      primaryRGBA: "rgba(144, 0, 0, 0.37)",
+
+      secondary: "rgba(0,0,0,0.55)",
+    },
+  },
+  {
+    name: "FootZone 85+ Player Pick",
+    cost: {
+      coins: 90000,
+      points: 1000,
+    },
+    desc: "Pick 1 of 4 players rated 85 or higher",
+    noOfPlayers: 4,
+    minRating: 85,
+    type: "pick",
+    colors: {
+      primary: "#ef233c",
+      primaryRGBA: "rgba(144, 0, 0, 0.37)",
+
+      secondary: "rgba(0,0,0,0.55)",
+    },
+  },
 ];
 export default packs;
