@@ -8,7 +8,7 @@
           <div class="name text-center">
             {{ team1 }}
           </div>
-          <div class="card shadow-lg" :style="cardStyle1">
+          <div class="card shadow-lg">
             <div class="score">{{ team1Score }}</div>
           </div>
         </div>
@@ -201,7 +201,7 @@
           <div class="name text-center">
             {{ team2 }}
           </div>
-          <div class="card2 shadow-lg" :style="cardStyle2">
+          <div class="card2 shadow-lg">
             <div class="score">{{ team2Score }}</div>
           </div>
         </div>
@@ -218,9 +218,12 @@
 </template>
 
 <script>
-import teams from "../utils/teams";
+// import teams from "../utils/teams";
 export default {
-  name: "matches",
+  props: {
+    teams: Array,
+  },
+  name: "playMatch",
   data() {
     return {
       team1: "",
@@ -243,7 +246,7 @@ export default {
           yellowCards: 0,
         },
       },
-      teams: teams,
+      // teams: teams,
       teamsSelected: [],
     };
   },
@@ -280,72 +283,72 @@ export default {
       this.team2 = this.teamsSelected[1].name;
     },
   },
-  computed: {
-    team1TailwindColor() {
-      // Assuming matchStatistics.team1.colors.primary is in the format "#RRGGBB"
-      if (this.teamsSelected[0]) {
-        const primaryColor = this.teamsSelected[0].colors.primary;
+  // computed: {
+  //   team1TailwindColor() {
+  //     // Assuming matchStatistics.team1.colors.primary is in the format "#RRGGBB"
+  //     if (this.teamsSelected[0]) {
+  //       const primaryColor = this.teamsSelected[0].colors.primary;
 
-        // Map the primary color to the closest Tailwind CSS color variable
-        // You may need to adjust this mapping based on your specific color scheme
-        const colorMapping = {
-          "#fff": "white",
-          "#D00027": "red",
-          "#00A398": "slate",
-          "#FDE100": "teal",
-          "#004d98": "cyan",
-          "#DC052D": "stone",
-          // Add more mappings as needed
-        };
+  //       // Map the primary color to the closest Tailwind CSS color variable
+  //       // You may need to adjust this mapping based on your specific color scheme
+  //       const colorMapping = {
+  //         "#fff": "white",
+  //         "#D00027": "red",
+  //         "#00A398": "slate",
+  //         "#FDE100": "teal",
+  //         "#004d98": "cyan",
+  //         "#DC052D": "stone",
+  //         // Add more mappings as needed
+  //       };
 
-        // Default to 'red-500' if the primary color is not found in the mapping
-        return colorMapping[primaryColor];
-      }
-    },
-    team2TailwindColor() {
-      // Assuming matchStatistics.team1.colors.primary is in the format "#RRGGBB"
-      if (this.teamsSelected[1]) {
-        const primaryColor = this.teamsSelected[1].colors.primary;
+  //       // Default to 'red-500' if the primary color is not found in the mapping
+  //       return colorMapping[primaryColor];
+  //     }
+  //   },
+  //   team2TailwindColor() {
+  //     // Assuming matchStatistics.team1.colors.primary is in the format "#RRGGBB"
+  //     if (this.teamsSelected[1]) {
+  //       const primaryColor = this.teamsSelected[1].colors.primary;
 
-        // Map the primary color to the closest Tailwind CSS color variable
-        // You may need to adjust this mapping based on your specific color scheme
-        const colorMapping = {
-          "#fff": "white",
-          "#D00027": "red",
-          "#00A398": "slate",
-          "#FDE100": "teal",
-          "#004d98": "cyan",
-          "#DC052D": "stone",
-          // Add more mappings as needed
-        };
+  //       // Map the primary color to the closest Tailwind CSS color variable
+  //       // You may need to adjust this mapping based on your specific color scheme
+  //       const colorMapping = {
+  //         "#fff": "white",
+  //         "#D00027": "red",
+  //         "#00A398": "slate",
+  //         "#FDE100": "teal",
+  //         "#004d98": "cyan",
+  //         "#DC052D": "stone",
+  //         // Add more mappings as needed
+  //       };
 
-        // Default to 'red-500' if the primary color is not found in the mapping
-        return colorMapping[primaryColor];
-      }
-    },
-    cardStyle1() {
-      if (this.teamsSelected[0]) {
-        const primaryColor = this.teamsSelected[0].colors.primary;
-        const secondaryColor = this.teamsSelected[0].colors.secondary;
-        const thirdColor = this.teamsSelected[0].colors.third;
-        return {
-          background: `linear-gradient(315deg, rgba(0, 0, 0, 0) 70.26%, ${thirdColor} 116.8%), linear-gradient(131deg, ${primaryColor} -2.76%, ${secondaryColor} 123.04%)`,
-          // Add more styles as needed
-        };
-      }
-    },
-    cardStyle2() {
-      if (this.teamsSelected[1]) {
-        const primaryColor = this.teamsSelected[1].colors.primary;
-        const secondaryColor = this.teamsSelected[1].colors.secondary;
-        const thirdColor = this.teamsSelected[1].colors.third;
-        return {
-          background: `linear-gradient(315deg, rgba(0, 0, 0, 0) 70.26%, ${thirdColor} 116.8%), linear-gradient(131deg, ${primaryColor} -2.76%, ${secondaryColor} 123.04%)`,
-          // Add more styles as needed
-        };
-      }
-    },
-  },
+  //       // Default to 'red-500' if the primary color is not found in the mapping
+  //       return colorMapping[primaryColor];
+  //     }
+  //   },
+  //   cardStyle1() {
+  //     if (this.teamsSelected[0]) {
+  //       const primaryColor = this.teamsSelected[0].colors.primary;
+  //       const secondaryColor = this.teamsSelected[0].colors.secondary;
+  //       const thirdColor = this.teamsSelected[0].colors.third;
+  //       return {
+  //         background: `linear-gradient(315deg, rgba(0, 0, 0, 0) 70.26%, ${thirdColor} 116.8%), linear-gradient(131deg, ${primaryColor} -2.76%, ${secondaryColor} 123.04%)`,
+  //         // Add more styles as needed
+  //       };
+  //     }
+  //   },
+  //   cardStyle2() {
+  //     if (this.teamsSelected[1]) {
+  //       const primaryColor = this.teamsSelected[1].colors.primary;
+  //       const secondaryColor = this.teamsSelected[1].colors.secondary;
+  //       const thirdColor = this.teamsSelected[1].colors.third;
+  //       return {
+  //         background: `linear-gradient(315deg, rgba(0, 0, 0, 0) 70.26%, ${thirdColor} 116.8%), linear-gradient(131deg, ${primaryColor} -2.76%, ${secondaryColor} 123.04%)`,
+  //         // Add more styles as needed
+  //       };
+  //     }
+  //   },
+  // },
 };
 </script>
 <style>

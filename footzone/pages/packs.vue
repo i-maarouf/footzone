@@ -5,11 +5,9 @@
         {{ coinBalance.toLocaleString("en-US") }}
         <img src="../assets/coins.svg" alt="" />
       </div> -->
-      <div
-        class="packs row flex gap-x-20 gap-y-10 justify-center items-center w-full flex-wrap"
-      >
+      <div class="packs row grid grid-cols-4 gap-10 w-full place-items-center">
         <div
-          class="pack w-1/4"
+          class="pack w-full"
           v-for="pack in packs"
           :key="pack.name"
           :style="renderPackStyle(pack)"
@@ -114,7 +112,7 @@
               class="flex row align-center justify-center gap-4 flex-col"
             >
               <div
-                class="player gap-8 flex flex-wrap align-center justify-between"
+                class="player grid 2xl:grid-cols-7 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-10 w-full place-items-center justify-between"
               >
                 <div
                   class="playerInfo text-center"
@@ -591,13 +589,13 @@ export default {
   line-height: normal;
   text-align: center;
 }
-.playerInfo:hover {
+.playerPick .playerInfo:hover {
+  cursor: pointer;
   background: #1a202d;
 }
 .playerInfo {
   display: flex;
   align-items: center;
-  cursor: pointer;
   justify-content: center;
   animation: fadeIn 0.5s ease-in-out;
 }

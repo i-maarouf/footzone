@@ -4627,6 +4627,7 @@ const leagues = [
         name: "Athletic Club",
         shortName: "Athletic",
         tla: "ATH",
+        ELO: 78,
         crest: "https://crests.football-data.org/77.png",
         address: "Ibaigane, Alameda Mazarredo, 23 Bilbao 48009",
         website: "http://www.athletic-club.eus",
@@ -4916,6 +4917,7 @@ const leagues = [
         address: "Paseo Virgen del Puerto, 67 Madrid 28005",
         website: "http://www.clubatleticodemadrid.com",
         founded: 1903,
+        ELO: 85,
         clubColors: "Red / White / Blue",
         venue: "Estadio Wanda Metropolitano",
         runningCompetitions: [
@@ -5255,6 +5257,7 @@ const leagues = [
         address: "Calle del Sadar, s/n Pamplona 31006",
         website: "http://www.osasuna.es",
         founded: 1920,
+        ELO: 73,
         clubColors: "Red / Navy Blue",
         venue: "Estadio El Sadar",
         runningCompetitions: [
@@ -5512,6 +5515,7 @@ const leagues = [
         address: "Avenida Arístides Maillol s/n Barcelona 08028",
         website: "http://www.fcbarcelona.com",
         founded: 1899,
+        ELO: 87,
         clubColors: "Red / Navy Blue / Orange",
         venue: "Camp Nou",
         runningCompetitions: [
@@ -5830,6 +5834,7 @@ const leagues = [
         address: "Avenida Teresa de Calcuta, s/n Getafe 28903",
         website: "http://www.getafecf.com",
         founded: 1946,
+        ELO: 75,
         clubColors: "Blue / White",
         venue: "Coliseum Alfonso Pérez",
         runningCompetitions: [
@@ -6090,6 +6095,7 @@ const leagues = [
         address: "Calle del Pintor Manuel Maldonado, s/n Granada 18007",
         website: "http://www.granadacf.es",
         founded: 1931,
+        ELO: 73,
         clubColors: "Red / White",
         venue: "Estadio Nuevo Los Cármenes",
         runningCompetitions: [
@@ -6370,6 +6376,7 @@ const leagues = [
         id: 86,
         name: "Real Madrid CF",
         shortName: "Real Madrid",
+        ELO: 89,
         tla: "RMA",
         crest: "https://crests.football-data.org/86.png",
         address: "Avenida Concha Espina, 1 Madrid 28036",
@@ -6658,6 +6665,7 @@ const leagues = [
         id: 87,
         name: "Rayo Vallecano de Madrid",
         shortName: "Rayo Vallecano",
+        ELO: 71,
         tla: "RAY",
         crest: "https://crests.football-data.org/87.svg",
         address: "Calle del Payaso Fofó, s/n Madrid 28018",
@@ -6901,6 +6909,7 @@ const leagues = [
         address: "Son Moix, Calle Camí dels Reis, s/n Palma de Mallorca 07011",
         website: "http://www.rcdmallorca.es",
         founded: 1916,
+        ELO: 72,
         clubColors: "Red / Black",
         venue: "Iberostar Estadi",
         runningCompetitions: [
@@ -7193,6 +7202,7 @@ const leagues = [
         address: "Avenida de Heliópolis, s/n Sevilla 41012",
         website: "http://www.realbetisbalompie.es",
         founded: 1907,
+        ELO: 80,
         clubColors: "Green / White",
         venue: "Estadio Benito Villamarín",
         runningCompetitions: [
@@ -7532,6 +7542,7 @@ const leagues = [
         address: "Anoeta Pasalekua, 1 San Sebastián 20014",
         website: "http://www.realsociedad.com",
         founded: 1903,
+        ELO: 82,
         clubColors: "Blue / White",
         venue: "Estadio Municipal de Anoeta",
         runningCompetitions: [
@@ -7850,6 +7861,7 @@ const leagues = [
         address: "Camino Miralcamp, s/n Villarreal 12540",
         website: "http://www.villarrealcf.es",
         founded: 1923,
+        ELO: 81,
         clubColors: "Yellow / Blue",
         venue: "Estadio de la Cerámica",
         runningCompetitions: [
@@ -8131,6 +8143,7 @@ const leagues = [
         address: "Plaza del Valencia Club de Fútbol, 2 Valencia 46010",
         website: "http://www.valenciacf.com",
         founded: 1919,
+        ELO: 78,
         clubColors: "White / Orange / Black",
         venue: "Estadio de Mestalla",
         runningCompetitions: [
@@ -8451,6 +8464,7 @@ const leagues = [
         address: "Mendizorroza, Paseo Cervantes, s/n Vitoria 01007",
         website: "http://www.alaves.com",
         founded: 1921,
+        ELO: 76,
         clubColors: "Blue / White",
         venue: "Estadio de Mendizorroza",
         runningCompetitions: [
@@ -8764,6 +8778,7 @@ const leagues = [
         address: "Plaza de Madrid, s/n Cádiz 11010",
         website: "http://www.cadizcf.com",
         founded: 1910,
+        ELO: 77,
         clubColors: "Yellow / Blue",
         venue: "Estadio Ramón de Carranza",
         runningCompetitions: [
@@ -9110,6 +9125,7 @@ const leagues = [
         address: "Calle Alcalde Santiago Martínez Cabrejas, 5 Almería 04007",
         website: "http://www.udalmeriasad.com",
         founded: 1989,
+        ELO: 70,
         clubColors: "Red / White",
         venue: "Estadio de los Juegos Mediterráneos",
         runningCompetitions: [
@@ -9397,6 +9413,7 @@ const leagues = [
         address: "Calle Pío XII, 29 Las Palmas de Gran Canaria 35005",
         website: "http://www.udlaspalmas.es",
         founded: 1949,
+        ELO: 75,
         clubColors: "Yellow / Blue",
         venue: "Estadio de Gran Canaria",
         runningCompetitions: [
@@ -9703,6 +9720,7 @@ const leagues = [
         address: "Avinguda de Montilivi, 141 Girona 17003",
         website: "http://www.gironafc.cat",
         founded: 1930,
+        ELO: 84,
         clubColors: "Red / White / Blue",
         venue: "Estadi Municipal de Montilivi",
         runningCompetitions: [
@@ -10002,6 +10020,7 @@ const leagues = [
         address: "Calle del Conde de Gondomar, 1 Vigo 36203",
         website: "http://www.celtavigo.net",
         founded: 1923,
+        ELO: 76,
         clubColors: "Sky Blue / White",
         venue: "Estadio de Balaídos",
         runningCompetitions: [
@@ -10289,6 +10308,7 @@ const leagues = [
         address: "Calle Sevilla Fútbol Club, s/n Sevilla 41005",
         website: "http://www.sevillafc.es",
         founded: 1905,
+        ELO: 80,
         clubColors: "White / Red",
         venue: "Estadio Ramón Sánchez Pizjuán",
         runningCompetitions: [

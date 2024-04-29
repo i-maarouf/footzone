@@ -1,7 +1,9 @@
 <template>
   <section>
     <div class="mainContainer p-4 gap-5 flex flex-col">
-      <div class="playersContainer flex w-full flex-wrap justify-between gap-4">
+      <div
+        class="playersContainer grid 2xl:grid-cols-7 xl:grid-cols-5 md:grid-cols-3 grid-cols-2 gap-10 w-full place-items-center"
+      >
         <div class="player" v-for="player in players" :key="player.player_id">
           <Player :player="player" />
         </div>

@@ -65,7 +65,7 @@ const links = [
   },
   {
     label: "Matches",
-    to: "/match",
+    to: "/matches",
   },
   {
     label: "Standings",

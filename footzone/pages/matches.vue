@@ -1,20 +1,34 @@
 <template>
   <section>
-    <div class="flex items-center space-x-4" v-if="loading">
-      <USkeleton class="h-12 w-12" :ui="{ rounded: 'rounded-full' }" />
-      <div class="space-y-2">
-        <USkeleton class="h-4 w-[250px]" />
-        <USkeleton class="h-4 w-[200px]" />
+    <div
+      class="flex p-5 items-center justify-center w-full space-x-4"
+      v-if="loading"
+    >
+      <!-- <USkeleton class="h-12 w-12" :ui="{ rounded: 'rounded-full' }" /> -->
+      <div class="gap-4 container grid grid-cols-2 w-full space-between">
+        <USkeleton class="h-[130px] w-[600px] skeletons" />
+        <USkeleton class="h-[130px] w-[600px] skeletons" />
+        <USkeleton class="h-[130px] w-[600px] skeletons" />
+        <USkeleton class="h-[130px] w-[600px] skeletons" />
+        <USkeleton class="h-[130px] w-[600px] skeletons" />
+        <USkeleton class="h-[130px] w-[600px] skeletons" />
+        <USkeleton class="h-[130px] w-[600px] skeletons" />
+        <USkeleton class="h-[130px] w-[600px] skeletons" />
+        <USkeleton class="h-[130px] w-[600px] skeletons" />
+        <USkeleton class="h-[130px] w-[600px] skeletons" />
       </div>
     </div>
-    <!-- <LeagueFixtures
+
+    <LeagueFixtures
       :fixtures="fixtures"
+      :resetLeague="resetLeague"
+      :getUserMatches="getUserMatches"
       :teamSelected="teamSelected"
-      v-if="fixtures.length > 0 && !loading"
-    /> -->
+      v-if="fixtures && !loading"
+    />
     <div
-      class="mainContainer p-5 container mx-auto flex flex-col aling-center justify-center"
-      v-if="fixtures.length == 0 && !loading"
+      class="mainContainer p-5 container mx-auto flex flex-col items-center justify-center"
+      v-if="!fixtures && !loading"
     >
       <div class="mainTitle text-center mb-10">
         Select the club you want to manage
@@ -147,7 +161,7 @@
     </div>
     <div
       class="teamSelected fadeIn"
-      v-if="teamSelected && fixtures.length == 0 && !loading"
+      v-if="teamSelected && !fixtures && !loading"
     >
       <div class="teamLeague w-1/3 flex items-center gap-0">
         <img
@@ -180,13 +194,6 @@
         />
       </div>
     </div>
-
-    <Line
-      :data="chartData"
-      borderColor="#ffffff"
-      :options="chartOptions"
-      :style="myStyles"
-    />
   </section>
 </template>
 
@@ -194,33 +201,9 @@
 import leagues from "../utils/teams";
 import { supabase } from "../src/lib/supabaseClient";
 import { useUserStore } from "~/store/useUserStore";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { Line } from "vue-chartjs";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 export default {
-  name: "index",
-  components: {
-    Line,
-  },
+  name: "matches",
   data() {
     return {
       showPL: false,
@@ -268,35 +251,34 @@ export default {
       loading: true,
       fixtures: [],
       teamSelected: "",
-      chartData: {
-        labels: ["January", "February", "March"],
-        datasets: [{ data: [40, 20, 12], backgroundColor: "#06c167" }],
-        backgroundColor: "#06c167",
-      },
-      chartOptions: {
-        responsive: true,
-      },
     };
   },
   mounted() {
-    this.getUserData().then(() => {
-      this.getUserTeam();
-      this.getUserMatches().then(() => {
-        this.loading = false;
-      });
-    });
+    const userStore = useUserStore();
+
+    this.getUserData();
   },
-  beforeUpdate() {},
-  computed: {
-    myStyles() {
-      return {
-        height: "50px",
-        width: "450px",
-      };
-    },
-  },
+  beforeMounted() {},
+  computed: {},
 
   methods: {
+    async getUserData() {
+      // this.loading = true;
+      console.log("getting data....");
+      const { data, error } = await supabase.from("users").select();
+      // .then(() => {
+      //   this.getUserMatches();
+      //   this.getUserTeam();
+      // });
+      if (data) {
+        // console.log("data:", data);
+
+        this.getUserTeam();
+        this.getUserMatches().then(() => {
+          this.loading = false;
+        });
+      }
+    },
     generateMatches() {
       this.updateUserTeam();
       let leagues = [
@@ -337,6 +319,8 @@ export default {
       }
       this.fixtures = fixtures;
       this.updateUserLeagueFixtures();
+      let runningTeams = this.leagues[index].teams.map((team) => team);
+      this.generateTable(runningTeams);
     },
 
     async updateUserTeam() {
@@ -358,29 +342,42 @@ export default {
         .select("");
     },
     async getUserMatches() {
+      console.log("getting user matches....");
       const userStore = useUserStore();
+      console.log("userStore", userStore.user.user_metadata.username);
 
-      const { data, error } = await supabase
-        .from("fixtures")
-        .select("fixtures")
-        .eq("username", userStore.user.user_metadata.username);
+      if (userStore) {
+        console.log("userStore", userStore.user.user_metadata.username);
 
-      if (data) {
-        this.fixtures = data[0].fixtures;
-        console.log("data", data);
+        const { data, error } = await supabase
+          .from("fixtures")
+          .select("fixtures")
+          .eq("username", userStore.user.user_metadata.username);
+        if (data) {
+          this.fixtures = data[0].fixtures;
+          console.log("data", data);
+        }
+      } else {
+        console.log("error getting data....");
       }
     },
     async getUserTeam() {
+      console.log("getting user team....");
+
       const userStore = useUserStore();
-
-      const { data, error } = await supabase
-        .from("teams")
-        .select("team")
-        .eq("username", userStore.user.user_metadata.username);
-
-      if (data) {
-        this.teamSelected = data[0].team;
-        console.log("data", data);
+      // console.log("userStore", userStore);
+      if (userStore) {
+        console.log("userStore", userStore.user.user_metadata.username);
+        const { data, error } = await supabase
+          .from("teams")
+          .select("team")
+          .eq("username", userStore.user.user_metadata.username);
+        if (data) {
+          this.teamSelected = data[0].team;
+          console.log("data", data);
+        }
+      } else {
+        console.log("error getting data....");
       }
     },
     selectTeam(team) {
@@ -394,14 +391,42 @@ export default {
       }
     },
 
-    async getUserData() {
-      // this.loading = true;
-      const { data, error } = await supabase.from("users").select();
-      // .then(() => {
-      //   this.getUserMatches();
-      //   this.getUserTeam();
-      // });
-      if (data) console.log("data", data);
+    resetLeague() {
+      this.fixtures = [];
+      this.table = [];
+      this.generateMatches();
+    },
+    async generateTable(teams) {
+      let runningTeams = [];
+      console.log("teams", teams);
+
+      for (let i = 0; i < teams.length; i++) {
+        // teams[i].teamInfo = teamInfo;
+        let teamInfo = {
+          name: teams[i].name,
+          crest: teams[i].crest,
+          matchesPlayed: 0,
+          matchesWon: 0,
+          matchesDrawn: 0,
+          matchesLost: 0,
+          goalsScored: 0,
+          goalsConceded: 0,
+          goalDifference: 0,
+          points: 0,
+        };
+        // teamInfo.name = teams[i];
+        // teams[i].teamInfo.name = teams[i];
+        runningTeams.push(teamInfo);
+        // runningTeams[i];
+      }
+      const userStore = useUserStore();
+
+      const { data, error } = await supabase
+        .from("standings")
+        .update({ standings: runningTeams })
+        .eq("username", userStore.user.user_metadata.username)
+        .select("");
+      // console.log("runningTeams", runningTeams);
     },
   },
 };
@@ -419,6 +444,9 @@ export default {
   font-weight: 700;
 
   line-height: normal;
+}
+.skeletons:nth-child(even) {
+  justify-self: flex-end;
 }
 .league {
   height: 55px;

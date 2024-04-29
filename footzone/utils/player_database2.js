@@ -3,6 +3,22 @@ import ligue1Icon from "../assets/leagues/Ligue1.svg";
 
 const players = [
   {
+    player_id: 182521,
+    player_url: "/player/182521/toni-kroos/240002",
+    short_name: "T. Kroos",
+    long_name: "Toni Kroos",
+    player_positions: "CM, CDM",
+    overall: 90,
+    potential: 95,
+    age: 33,
+    club_name: "Real Madrid",
+    rarity: "Special",
+    league_name: "La Liga",
+    club_jersey_number: 8,
+    nationality_name: "Germany",
+    flag: "https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg",
+  },
+  {
     player_id: 231747,
     player_url: "/player/231747/kylian-mbappe/240002",
     player_image: "https://cdn.sofifa.net/players/231/747/24_240.png",

@@ -1,6 +1,6 @@
 <template>
   <UChip :text="player.count" size="3xl" :show="player.count > 1" inset>
-    <div :class="type == 'pick' ? 'playerCard2' : 'playerCard'">
+    <div :class="player.rarity == 'Special' ? 'playerCard2' : 'playerCard'">
       <div class="playerInfo">
         <div class="playerName">
           {{ player.short_name }}
@@ -64,7 +64,7 @@ export default {
 <style scoped>
 .playerCard {
   border-radius: 20px;
-  background: linear-gradient(149deg, #36358c 0%, #72255c 89.16%);
+  background: linear-gradient(149deg, #d49e0d 0%, #000000 89.16%);
   height: 270px;
   width: 200px;
   display: flex;
@@ -76,9 +76,9 @@ export default {
 }
 .playerCard2 {
   border-radius: 20px;
-  background: linear-gradient(149deg, #36358c 0%, #72255c 89.16%);
-  height: 170px;
-  width: 150px;
+  background: linear-gradient(149deg, #36358c 0%, #72255c 89.16%) !important;
+  height: 270px;
+  width: 200px;
   display: flex;
   align-items: center;
   justify-content: space-between;

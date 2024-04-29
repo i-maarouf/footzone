@@ -1,5 +1,7 @@
 <template>
-  <div class="mainContainer flex flex-col py-0 items-center justify-center">
+  <div class="mainContainer flex flex-col py-4 items-center justify-center">
+    <Loading v-if="loading" />
+
     <UProgress
       animation="swing"
       size="sm"
@@ -17,7 +19,7 @@
         <UButton
           :icon="
             matchFinish
-              ? 'i-heroicons-arrow-path'
+              ? 'i-heroicons-arrow-long-right'
               : pause == true
               ? 'i-heroicons-play'
               : pause == false
@@ -25,8 +27,10 @@
               : ''
           "
           size="sm"
+          trailing
           color="primary"
           square
+          :label="matchFinish ? 'Continue' : ''"
           variant="solid"
           @click="handleMatchStatus"
         />
@@ -324,12 +328,12 @@
           />
         </div>
         <div class="matchInfo flex justify-center items-center gap-3">
-          <img :src="this.teamsSelected[0].icon" class="clubLogo" alt="" />
+          <img :src="this.teamsSelected[0].crest" class="clubLogo" alt="" />
           <div class="infoText">
             {{ this.team1Score }} -
             {{ this.team2Score }}
           </div>
-          <img :src="this.teamsSelected[1].icon" class="clubLogo" alt="" />
+          <img :src="this.teamsSelected[1].crest" class="clubLogo" alt="" />
         </div>
       </div>
     </UModal>
@@ -339,11 +343,17 @@
 <script>
 import events from "../utils/events";
 import axios from "axios";
+import { useUserStore } from "~/store/useUserStore";
+import { supabase } from "../src/lib/supabaseClient";
 
 export default {
   name: "timeline",
   props: {
     teamsSelected: Array,
+    matchWeek: Number,
+    matchNo: Number,
+    table: Array,
+    setMatch: Function,
   },
   data() {
     return {
@@ -363,7 +373,8 @@ export default {
         possession1: 0,
         possession2: 0,
       },
-
+      loading: false,
+      fixtures: [],
       bookingFactor: 1,
       bookingFactor2: 1,
       team1Score: 0,
@@ -471,7 +482,7 @@ export default {
             let elo2 = this.teamsSelected[1].ELO;
             const range = 100;
             const diff = Math.abs(elo1 - elo2);
-            const adjustmentFactor = 2; // You can tweak this value
+            const adjustmentFactor = 1.3; // You can tweak this value
 
             const homeAdvantage = 0.02; // Advantage for the home team
 
@@ -548,20 +559,84 @@ export default {
         behavior: "smooth",
       });
     },
+    async getLeagueFixtures() {
+      const userStore = useUserStore();
+
+      const { data, error } = await supabase
+        .from("fixtures")
+        .select("fixtures")
+        .eq("username", userStore.user.user_metadata.username);
+
+      if (data) {
+        this.fixtures = data[0].fixtures;
+        console.log("data", data);
+      }
+    },
+    async updateUserLeagueFixtures(outcome) {
+      const userStore = useUserStore();
+
+      this.fixtures[this.matchWeek - 1][this.matchNo].outcome = outcome;
+      console.log(
+        "currentFixture outcome",
+        this.fixtures[this.matchWeek - 1][this.matchNo]
+      );
+      const { data, error } = await supabase
+        .from("fixtures")
+        .update({ fixtures: this.fixtures })
+        .eq("username", userStore.user.user_metadata.username)
+        .select("");
+    },
     handleMatchStatus() {
       if (!this.matchFinish) {
         this.pause = !this.pause;
       } else {
-        this.matchFinish = false;
-        this.eventsTimeline = [];
-        this.noOfEvents = 0;
-        this.typeOfEvent = [];
-        this.playMinutes = [];
-        this.getNumberOfChances();
-        this.getPlayMinutes();
-        this.getMatchEvents();
-        this.playMatch();
+        let outcome = {
+          team1Score: this.team1Score,
+          team2Score: this.team2Score,
+          winner:
+            this.team1Score == this.team2Score
+              ? null
+              : this.team1Score > this.team2Score
+              ? this.teamsSelected[0].name
+              : this.teamsSelected[1].name,
+        };
+        console.log("outcome", outcome);
+        this.updateFixtureOutcome(
+          this.teamsSelected[0],
+          this.teamsSelected[1],
+          outcome
+        );
+        this.loading = true;
+        this.getLeagueFixtures().then(() => {
+          this.updateUserLeagueFixtures(outcome).then(() => {
+            // this.updateHistoryStadings().then(()=>{
+
+            this.updateLeagueStandings().then(() => {
+              // location.reload();
+              this.setMatch().then(() => {
+                this.loading = false;
+              });
+            });
+            // });
+          });
+        });
       }
+    },
+    async updateHistoryStadings() {
+      const userStore = useUserStore();
+      const { data, error } = await supabase
+        .from("standings")
+        .update({ positionHistory: this.table })
+        .eq("username", userStore.user.user_metadata.username)
+        .select("");
+    },
+    async updateLeagueStandings() {
+      const userStore = useUserStore();
+      const { data, error } = await supabase
+        .from("standings")
+        .update({ standings: this.table })
+        .eq("username", userStore.user.user_metadata.username)
+        .select("");
     },
     getMatchEvents() {
       for (let i = 0; i < this.playMinutes.length; i++) {
@@ -700,43 +775,41 @@ export default {
       };
       this.$emit("getMatchStatistics", statistics);
     },
-    getTeams() {
-      // var myHeaders = new Headers();
-      // myHeaders.append("X-Auth-Token", "93fe5c8a163a4889b26f5d72998ec2eb");
-
-      // var raw = "";
-
-      // var requestOptions = {
-      //   method: "GET",
-      //   headers: myHeaders,
-      //   body: raw,
-      //   redirect: "follow",
-      // };
-
-      // fetch("http://api.football-data.org/v4/matches", requestOptions)
-      //   .then((response) => {
-      //     console.log("res: ", response);
-      //   })
-      //   .catch((error) => console.log("error", error));
-
-      var data = "";
-
-      var config = {
-        method: "get",
-        url: "http://api.football-data.org/v4/matches",
-        headers: {
-          "X-Auth-Token": "93fe5c8a163a4889b26f5d72998ec2eb",
-        },
-        data: data,
-      };
-
-      axios(config)
-        .then(function (response) {
-          console.log(JSON.stringify(response.data));
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+    updateFixtureOutcome(team1, team2, outcome) {
+      for (let i = 0; i < this.table.length; i++) {
+        if (this.table[i].name == team1.name) {
+          this.table[i].matchesPlayed++;
+          if (outcome.winner == team1.name) {
+            this.table[i].matchesWon++;
+            this.table[i].points += 3;
+          } else if (outcome.winner != null) {
+            this.table[i].matchesLost++;
+          } else if (outcome.winner == null) {
+            this.table[i].matchesDrawn++;
+            this.table[i].points += 1;
+          }
+          this.table[i].goalsScored += outcome.team1Score;
+          this.table[i].goalsConceded += outcome.team2Score;
+          let GD = outcome.team1Score - outcome.team2Score;
+          this.table[i].goalDifference += GD;
+        }
+        if (this.table[i].name == team2.name) {
+          this.table[i].matchesPlayed++;
+          if (outcome.winner == this.table[i].name) {
+            this.table[i].matchesWon++;
+            this.table[i].points += 3;
+          } else if (outcome.winner != null) {
+            this.table[i].matchesLost++;
+          } else if (outcome.winner == null) {
+            this.table[i].matchesDrawn++;
+            this.table[i].points += 1;
+          }
+          this.table[i].goalsScored += outcome.team2Score;
+          this.table[i].goalsConceded += outcome.team1Score;
+          let GD = outcome.team2Score - outcome.team1Score;
+          this.table[i].goalDifference += GD;
+        }
+      }
     },
   },
   mounted() {
@@ -748,7 +821,13 @@ export default {
 
     this.getMatchStatistics();
     this.playMatch();
-    this.getTeams();
+    // this.getLeagueFixtures().then(() => {
+    //   // console.log("this.matchWeek", this.matchWeek);
+    //   let currentFixture = this.fixtures[this.matchWeek - 1][this.matchNo];
+    //   console.log("currentFixture", currentFixture);
+    // });
+
+    // this.getTeams();
   },
   beforeUpdate() {
     // console.log("this.teamsSelected[0].ELO :" + this.teamsSelected[0].ELO);
@@ -780,7 +859,7 @@ export default {
   line-height: normal;
 }
 .timeline {
-  height: 380px;
+  min-height: 380px;
   /* justify-content: space-between; */
   /* margin-top: 50px; */
 
@@ -812,9 +891,9 @@ export default {
   line-height: normal;
 }
 .outsideContainer {
-  max-height: 360px;
+  /* max-height: 360px;
 
-  overflow-y: scroll;
+  overflow-y: scroll; */
   width: 100%;
 }
 
