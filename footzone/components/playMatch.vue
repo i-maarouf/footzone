@@ -33,7 +33,7 @@
           </div> -->
         </div>
 
-        <div class="team2 w-1/3 gap-2">
+        <div class="team2 gap-2">
           <div
             class="span flex fap-3"
             v-for="(reds, index) in Number(matchStatistics.team2.redCards)"
